@@ -1,0 +1,182 @@
+@import 'tailwindcss';
+
+@custom-variant dark (&:is(.dark *));
+
+:root {
+  --background: oklch(0.975 0.003 80);
+  --foreground: oklch(0.22 0.008 55);
+  --card: oklch(0.965 0.004 80);
+  --card-foreground: oklch(0.22 0.008 55);
+  --popover: oklch(0.975 0.003 80);
+  --popover-foreground: oklch(0.22 0.008 55);
+  --primary: oklch(0.28 0.015 55);
+  --primary-foreground: oklch(0.965 0.004 80);
+  --secondary: oklch(0.945 0.005 75);
+  --secondary-foreground: oklch(0.28 0.015 55);
+  --muted: oklch(0.935 0.006 75);
+  --muted-foreground: oklch(0.48 0.01 60);
+  --accent: oklch(0.72 0.06 75);
+  --accent-foreground: oklch(0.22 0.008 55);
+  --destructive: oklch(0.577 0.245 27.325);
+  --destructive-foreground: oklch(0.577 0.245 27.325);
+  --border: oklch(0.905 0.006 75);
+  --input: oklch(0.92 0.005 75);
+  --ring: oklch(0.72 0.06 75);
+  --chart-1: oklch(0.72 0.06 75);
+  --chart-2: oklch(0.60 0.04 60);
+  --chart-3: oklch(0.48 0.01 60);
+  --chart-4: oklch(0.80 0.04 80);
+  --chart-5: oklch(0.68 0.04 70);
+  --radius: 0px;
+
+  --warm-stone: oklch(0.48 0.01 60);
+  --warm-sand: oklch(0.935 0.006 75);
+}
+
+@theme inline {
+  --font-sans: 'Inter', 'Inter Fallback', sans-serif;
+  --font-serif: 'Playfair Display', 'Playfair Display Fallback', serif;
+  --font-mono: 'Geist Mono', 'Geist Mono Fallback', monospace;
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-warm-stone: var(--warm-stone);
+  --color-warm-sand: var(--warm-sand);
+  --radius-sm: calc(var(--radius));
+  --radius-md: calc(var(--radius));
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius));
+  --radius-2xl: calc(var(--radius));
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+/* Noise texture — barely perceptible grain */
+.noise-bg {
+  position: relative;
+}
+.noise-bg::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  opacity: 0.018;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 512px 512px;
+  pointer-events: none;
+  z-index: 1;
+}
+.noise-bg > * {
+  position: relative;
+  z-index: 2;
+}
+
+/* Underline — hair-thin, slow reveal */
+.nav-link {
+  position: relative;
+  text-decoration: none;
+}
+.nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: -3px;
+  left: 0;
+  width: 0;
+  height: 0.5px;
+  background-color: var(--foreground);
+  transition: width 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.nav-link:hover::after {
+  width: 100%;
+}
+
+/* Button — quiet shimmer & soft lift */
+.btn-luxury {
+  position: relative;
+  overflow: hidden;
+  transition: all 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.btn-luxury::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.08),
+    transparent
+  );
+  transition: left 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.btn-luxury:hover::before {
+  left: 100%;
+}
+.btn-luxury:hover {
+  box-shadow: 0 2px 20px rgba(0, 0, 0, 0.06);
+  transform: translateY(-1px);
+}
+
+/* Progress bar fill */
+@keyframes progress-fill {
+  from { width: 0%; }
+  to { width: var(--target-width); }
+}
+.progress-animate {
+  animation: progress-fill 1.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+/* Stagger entrance */
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.stagger-1 { animation: fade-in-up 0.9s cubic-bezier(0.22, 1, 0.36, 1) 0.1s both; }
+.stagger-2 { animation: fade-in-up 0.9s cubic-bezier(0.22, 1, 0.36, 1) 0.35s both; }
+
+/* Smooth scroll */
+html { scroll-behavior: smooth; }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .stagger-1, .stagger-2 { animation: none; opacity: 1; transform: none; }
+  .progress-animate { animation: none; }
+  .btn-luxury::before { display: none; }
+  .nav-link::after { transition: none; }
+}
