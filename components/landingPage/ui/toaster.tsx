@@ -1,6 +1,6 @@
 'use client'
 
-import { useToast } from '@/pomer-care/hooks/use-toast'
+import { useToast } from '@/hooks/use-toast'
 import {
   Toast,
   ToastClose,
@@ -8,7 +8,7 @@ import {
   ToastProvider,
   ToastTitle,
   ToastViewport,
-} from '@/pomer-care/components/landingPage/ui/toast'
+} from '@/components/landingPage/ui/toast'
 
 export function Toaster() {
   const { toasts } = useToast()
