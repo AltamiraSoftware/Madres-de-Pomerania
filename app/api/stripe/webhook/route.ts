@@ -22,9 +22,11 @@ async function upsertSubscription(params: {
   stripeSubId: string;
   status: "active" | "past_due" | "canceled";
   tier: "esencial" | "vip";
+
   periodStart?: number | null;
   periodEnd?: number | null;
-  cancelAtPeriodEnd?: boolean;
+
+  cancelAtPeriodEnd?: boolean | null;
   cancelAt?: number | null;
   canceledAt?: number | null;
 }) {
@@ -36,7 +38,8 @@ async function upsertSubscription(params: {
     ? new Date(params.periodEnd * 1000).toISOString()
     : null;
 
-  const cancel_at_period_end = params.cancelAtPeriodEnd ?? false;
+  const cancel_at_period_end =
+    typeof params.cancelAtPeriodEnd === "boolean" ? params.cancelAtPeriodEnd : false;
 
   const cancel_at = params.cancelAt
     ? new Date(params.cancelAt * 1000).toISOString()
@@ -78,14 +81,10 @@ export async function POST(req: Request) {
   const sig = (await headers()).get("stripe-signature");
 
   if (!sig) {
-    return NextResponse.json(
-      { error: "Missing Stripe signature" },
-      { status: 400 }
-    );
+    return NextResponse.json({ error: "Missing Stripe signature" }, { status: 400 });
   }
 
   let event: Stripe.Event;
-
   try {
     event = stripe.webhooks.constructEvent(
       body,
@@ -99,14 +98,13 @@ export async function POST(req: Request) {
 
   try {
     switch (event.type) {
-
       case "checkout.session.completed": {
         const session = event.data.object as Stripe.Checkout.Session;
 
         const userId = (session.metadata?.supabase_user_id || "") as string;
-
-        const tier =
-          ((session.metadata?.tier as "esencial" | "vip") || "esencial");
+        const tier = ((session.metadata?.tier as "esencial" | "vip") || "esencial") as
+          | "esencial"
+          | "vip";
 
         const customerId = session.customer as string;
         const stripeSubId = session.subscription as string;
@@ -120,9 +118,12 @@ export async function POST(req: Request) {
 
         const sub = await stripe.subscriptions.retrieve(stripeSubId);
 
+        // Tipos: Stripe.Subscription trae estos campos en runtime, pero TS a veces molesta
         const s = sub as unknown as {
           id: string;
           status: string;
+          current_period_start?: number | null;
+          current_period_end?: number | null;
           cancel_at_period_end?: boolean;
           cancel_at?: number | null;
           canceled_at?: number | null;
@@ -131,12 +132,12 @@ export async function POST(req: Request) {
         await upsertSubscription({
           userId,
           customerId,
-          stripeSubId,
+          stripeSubId: s.id,
           status: mapStripeStatus(s.status),
           tier,
-          periodStart: null,
-          periodEnd: null,
-          cancelAtPeriodEnd: s.cancel_at_period_end ?? false,
+          periodStart: s.current_period_start ?? null,
+          periodEnd: s.current_period_end ?? null,
+          cancelAtPeriodEnd: typeof s.cancel_at_period_end === "boolean" ? s.cancel_at_period_end : false,
           cancelAt: s.cancel_at ?? null,
           canceledAt: s.canceled_at ?? null,
         });
@@ -146,20 +147,20 @@ export async function POST(req: Request) {
 
       case "customer.subscription.updated":
       case "customer.subscription.deleted": {
-
         const sub = event.data.object as Stripe.Subscription;
-
         const customerId = sub.customer as string;
 
         const s = sub as unknown as {
           id: string;
           status: string;
+          current_period_start?: number | null;
+          current_period_end?: number | null;
           cancel_at_period_end?: boolean;
           cancel_at?: number | null;
           canceled_at?: number | null;
         };
 
-       const row =
+        const row =
           (
             await supabaseAdmin
               .from("subscriptions")
@@ -182,9 +183,9 @@ export async function POST(req: Request) {
             stripeSubId: s.id,
             status: mapStripeStatus(s.status),
             tier: row.tier,
-            periodStart: null,
-            periodEnd: null,
-            cancelAtPeriodEnd: s.cancel_at_period_end ?? false,
+            periodStart: s.current_period_start ?? null,
+            periodEnd: s.current_period_end ?? null,
+            cancelAtPeriodEnd: typeof s.cancel_at_period_end === "boolean" ? s.cancel_at_period_end : false,
             cancelAt: s.cancel_at ?? null,
             canceledAt: s.canceled_at ?? null,
           });
@@ -193,7 +194,6 @@ export async function POST(req: Request) {
         break;
       }
     }
-
   } catch (err) {
     const msg = err instanceof Error ? err.message : "Webhook handler error";
     return NextResponse.json({ error: msg }, { status: 500 });

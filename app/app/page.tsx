@@ -29,7 +29,7 @@ export default async function DashboardPage() {
   const tier = sub?.tier ?? "esencial";
   const isActive = status === "active";
 
-  const willCancel = Boolean(sub?.cancel_at_period_end);
+  const willCancel = Boolean(sub?.cancel_at) || Boolean(sub?.cancel_at_period_end);
   const cancelDate = sub?.cancel_at ?? sub?.current_period_end;
 
   return (
