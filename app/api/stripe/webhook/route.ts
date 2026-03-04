@@ -24,15 +24,28 @@ async function upsertSubscription(params: {
   tier: "esencial" | "vip";
   periodStart?: number | null;
   periodEnd?: number | null;
+  cancelAtPeriodEnd?: boolean;
+  cancelAt?: number | null;
+  canceledAt?: number | null;
 }) {
   const current_period_start = params.periodStart
     ? new Date(params.periodStart * 1000).toISOString()
     : null;
+
   const current_period_end = params.periodEnd
     ? new Date(params.periodEnd * 1000).toISOString()
     : null;
 
-  // conservar subscription_start_at si ya existe
+  const cancel_at_period_end = params.cancelAtPeriodEnd ?? false;
+
+  const cancel_at = params.cancelAt
+    ? new Date(params.cancelAt * 1000).toISOString()
+    : null;
+
+  const canceled_at = params.canceledAt
+    ? new Date(params.canceledAt * 1000).toISOString()
+    : null;
+
   const { data: existing } = await supabaseAdmin
     .from("subscriptions")
     .select("subscription_start_at")
@@ -52,6 +65,9 @@ async function upsertSubscription(params: {
       subscription_start_at,
       current_period_start,
       current_period_end,
+      cancel_at_period_end,
+      cancel_at,
+      canceled_at,
     },
     { onConflict: "user_id" }
   );
@@ -62,10 +78,14 @@ export async function POST(req: Request) {
   const sig = (await headers()).get("stripe-signature");
 
   if (!sig) {
-    return NextResponse.json({ error: "Missing Stripe signature" }, { status: 400 });
+    return NextResponse.json(
+      { error: "Missing Stripe signature" },
+      { status: 400 }
+    );
   }
 
   let event: Stripe.Event;
+
   try {
     event = stripe.webhooks.constructEvent(
       body,
@@ -79,13 +99,14 @@ export async function POST(req: Request) {
 
   try {
     switch (event.type) {
+
       case "checkout.session.completed": {
         const session = event.data.object as Stripe.Checkout.Session;
 
         const userId = (session.metadata?.supabase_user_id || "") as string;
-        const tier = ((session.metadata?.tier as "esencial" | "vip") || "esencial") as
-          | "esencial"
-          | "vip";
+
+        const tier =
+          ((session.metadata?.tier as "esencial" | "vip") || "esencial");
 
         const customerId = session.customer as string;
         const stripeSubId = session.subscription as string;
@@ -99,14 +120,25 @@ export async function POST(req: Request) {
 
         const sub = await stripe.subscriptions.retrieve(stripeSubId);
 
+        const s = sub as unknown as {
+          id: string;
+          status: string;
+          cancel_at_period_end?: boolean;
+          cancel_at?: number | null;
+          canceled_at?: number | null;
+        };
+
         await upsertSubscription({
           userId,
           customerId,
           stripeSubId,
-          status: mapStripeStatus(sub.status),
+          status: mapStripeStatus(s.status),
           tier,
           periodStart: null,
-periodEnd: null,
+          periodEnd: null,
+          cancelAtPeriodEnd: s.cancel_at_period_end ?? false,
+          cancelAt: s.cancel_at ?? null,
+          canceledAt: s.canceled_at ?? null,
         });
 
         break;
@@ -114,29 +146,54 @@ periodEnd: null,
 
       case "customer.subscription.updated":
       case "customer.subscription.deleted": {
+
         const sub = event.data.object as Stripe.Subscription;
+
         const customerId = sub.customer as string;
 
-        const { data: row } = await supabaseAdmin
-          .from("subscriptions")
-          .select("user_id, tier")
-          .eq("stripe_customer_id", customerId)
-          .maybeSingle();
+        const s = sub as unknown as {
+          id: string;
+          status: string;
+          cancel_at_period_end?: boolean;
+          cancel_at?: number | null;
+          canceled_at?: number | null;
+        };
+
+       const row =
+          (
+            await supabaseAdmin
+              .from("subscriptions")
+              .select("user_id, tier")
+              .eq("stripe_subscription_id", s.id)
+              .maybeSingle()
+          ).data ??
+          (
+            await supabaseAdmin
+              .from("subscriptions")
+              .select("user_id, tier")
+              .eq("stripe_customer_id", customerId)
+              .maybeSingle()
+          ).data;
 
         if (row?.user_id) {
           await upsertSubscription({
             userId: row.user_id,
             customerId,
-            stripeSubId: sub.id,
-            status: mapStripeStatus(sub.status),
+            stripeSubId: s.id,
+            status: mapStripeStatus(s.status),
             tier: row.tier,
             periodStart: null,
-periodEnd: null,
+            periodEnd: null,
+            cancelAtPeriodEnd: s.cancel_at_period_end ?? false,
+            cancelAt: s.cancel_at ?? null,
+            canceledAt: s.canceled_at ?? null,
           });
         }
+
         break;
       }
     }
+
   } catch (err) {
     const msg = err instanceof Error ? err.message : "Webhook handler error";
     return NextResponse.json({ error: msg }, { status: 500 });
