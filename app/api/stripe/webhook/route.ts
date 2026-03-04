@@ -16,6 +16,17 @@ function mapStripeStatus(s: string): "active" | "past_due" | "canceled" {
   return "past_due";
 }
 
+type StripeSubRuntime = {
+  id: string;
+  status: string;
+  customer: string;
+  current_period_start?: number | null;
+  current_period_end?: number | null;
+  cancel_at_period_end?: boolean;
+  cancel_at?: number | null;
+  canceled_at?: number | null;
+};
+
 async function upsertSubscription(params: {
   userId: string;
   customerId: string;
@@ -26,7 +37,7 @@ async function upsertSubscription(params: {
   periodStart?: number | null;
   periodEnd?: number | null;
 
-  cancelAtPeriodEnd?: boolean | null;
+  cancelAtPeriodEnd?: boolean;
   cancelAt?: number | null;
   canceledAt?: number | null;
 }) {
@@ -38,8 +49,8 @@ async function upsertSubscription(params: {
     ? new Date(params.periodEnd * 1000).toISOString()
     : null;
 
-  const cancel_at_period_end =
-    typeof params.cancelAtPeriodEnd === "boolean" ? params.cancelAtPeriodEnd : false;
+  // OJO: no uses ?? false si no estás 100% seguro de pasar el campo
+  const cancel_at_period_end = params.cancelAtPeriodEnd === true;
 
   const cancel_at = params.cancelAt
     ? new Date(params.cancelAt * 1000).toISOString()
@@ -117,17 +128,7 @@ export async function POST(req: Request) {
         }
 
         const sub = await stripe.subscriptions.retrieve(stripeSubId);
-
-        // Tipos: Stripe.Subscription trae estos campos en runtime, pero TS a veces molesta
-        const s = sub as unknown as {
-          id: string;
-          status: string;
-          current_period_start?: number | null;
-          current_period_end?: number | null;
-          cancel_at_period_end?: boolean;
-          cancel_at?: number | null;
-          canceled_at?: number | null;
-        };
+        const s = sub as unknown as StripeSubRuntime;
 
         await upsertSubscription({
           userId,
@@ -137,7 +138,7 @@ export async function POST(req: Request) {
           tier,
           periodStart: s.current_period_start ?? null,
           periodEnd: s.current_period_end ?? null,
-          cancelAtPeriodEnd: typeof s.cancel_at_period_end === "boolean" ? s.cancel_at_period_end : false,
+          cancelAtPeriodEnd: s.cancel_at_period_end,
           cancelAt: s.cancel_at ?? null,
           canceledAt: s.canceled_at ?? null,
         });
@@ -148,17 +149,8 @@ export async function POST(req: Request) {
       case "customer.subscription.updated":
       case "customer.subscription.deleted": {
         const sub = event.data.object as Stripe.Subscription;
-        const customerId = sub.customer as string;
-
-        const s = sub as unknown as {
-          id: string;
-          status: string;
-          current_period_start?: number | null;
-          current_period_end?: number | null;
-          cancel_at_period_end?: boolean;
-          cancel_at?: number | null;
-          canceled_at?: number | null;
-        };
+        const s = sub as unknown as StripeSubRuntime;
+        const customerId = s.customer as string;
 
         const row =
           (
@@ -185,7 +177,7 @@ export async function POST(req: Request) {
             tier: row.tier,
             periodStart: s.current_period_start ?? null,
             periodEnd: s.current_period_end ?? null,
-            cancelAtPeriodEnd: typeof s.cancel_at_period_end === "boolean" ? s.cancel_at_period_end : false,
+            cancelAtPeriodEnd: s.cancel_at_period_end,
             cancelAt: s.cancel_at ?? null,
             canceledAt: s.canceled_at ?? null,
           });
