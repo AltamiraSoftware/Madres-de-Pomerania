@@ -27,6 +27,8 @@ export default function SubscribeButton({ userId, tier = "esencial" }: { userId:
   };
 
   return (
+    <>
+    <p> dejate de joder flaco</p>
     <button
       onClick={goCheckout}
       disabled={loading}
@@ -34,5 +36,6 @@ export default function SubscribeButton({ userId, tier = "esencial" }: { userId:
     >
       {loading ? "Redirigiendo..." : "Suscribirme"}
     </button>
+    </>
   );
 }
