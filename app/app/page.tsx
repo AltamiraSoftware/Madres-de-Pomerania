@@ -29,11 +29,13 @@ export default async function DashboardPage() {
   const tier = sub?.tier ?? "esencial";
   const isActive = status === "active";
 
+  const willCancel = Boolean(sub?.cancel_at_period_end);
+  const cancelDate = sub?.cancel_at ?? sub?.current_period_end;
+
   return (
     <main className="p-8">
       <h1 className="text-2xl font-serif">Dashboard Cliente</h1>
 
-      {/* Banner si viene de Stripe: ?success=1 o ?canceled=1 */}
       <div className="mt-6">
         <CheckoutStatusBanner tier={tier} />
       </div>
@@ -43,11 +45,15 @@ export default async function DashboardPage() {
           <p className="font-medium">✅ Suscripción activa</p>
           <p className="text-sm opacity-80">Plan: {tier}</p>
 
-          {sub?.cancel_at_period_end && sub?.cancel_at && (
+          {willCancel && cancelDate && (
             <p className="mt-2 text-sm">
               ⚠️ Tu suscripción se cancelará el{" "}
               <span className="font-medium">
-                {new Date(sub.cancel_at).toLocaleDateString("es-ES")}
+                {new Date(cancelDate).toLocaleDateString("es-ES", {
+                  year: "numeric",
+                  month: "long",
+                  day: "numeric",
+                })}
               </span>
               . Mantendrás acceso hasta esa fecha.
             </p>
