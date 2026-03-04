@@ -1,4 +1,5 @@
 import { redirect } from "next/navigation";
+import SubscribeButton from "@/components/app/SubscribeButton";
 import { createServerSupabaseClient } from "@/lib/supabase/server";
 
 export default async function DashboardPage() {
@@ -17,6 +18,7 @@ export default async function DashboardPage() {
   return (
     <main className="p-8">
       <h1 className="text-2xl font-serif">Dashboard Cliente</h1>
+      <SubscribeButton userId={user.id} tier="esencial" />
     </main>
   );
 }
