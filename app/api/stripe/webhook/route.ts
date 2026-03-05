@@ -16,16 +16,39 @@ function mapStripeStatus(s: string): "active" | "past_due" | "canceled" {
   return "past_due";
 }
 
+// runtime shape mínimo (tu API version mete periodos en items.data)
 type StripeSubRuntime = {
   id: string;
   status: string;
   customer: string;
+  cancel_at?: number | null;
+  cancel_at_period_end?: boolean;
+  canceled_at?: number | null;
+  items?: {
+    data?: Array<{
+      current_period_start?: number | null;
+      current_period_end?: number | null;
+    }>;
+  };
+  // a veces puede existir arriba también (por si Stripe cambia)
   current_period_start?: number | null;
   current_period_end?: number | null;
-  cancel_at_period_end?: boolean;
-  cancel_at?: number | null;
-  canceled_at?: number | null;
 };
+
+// coge el periodo desde top-level o desde items.data (max end, min start)
+function extractPeriod(s: StripeSubRuntime): { start: number | null; end: number | null } {
+  const topStart = s.current_period_start ?? null;
+  const topEnd = s.current_period_end ?? null;
+
+  const items = s.items?.data ?? [];
+  const starts = items.map(i => i.current_period_start ?? null).filter((x): x is number => typeof x === "number");
+  const ends = items.map(i => i.current_period_end ?? null).filter((x): x is number => typeof x === "number");
+
+  const start = topStart ?? (starts.length ? Math.min(...starts) : null);
+  const end = topEnd ?? (ends.length ? Math.max(...ends) : null);
+
+  return { start, end };
+}
 
 async function upsertSubscription(params: {
   userId: string;
@@ -49,7 +72,6 @@ async function upsertSubscription(params: {
     ? new Date(params.periodEnd * 1000).toISOString()
     : null;
 
-  // OJO: no uses ?? false si no estás 100% seguro de pasar el campo
   const cancel_at_period_end = params.cancelAtPeriodEnd === true;
 
   const cancel_at = params.cancelAt
@@ -97,11 +119,7 @@ export async function POST(req: Request) {
 
   let event: Stripe.Event;
   try {
-    event = stripe.webhooks.constructEvent(
-      body,
-      sig,
-      process.env.STRIPE_WEBHOOK_SECRET!
-    );
+    event = stripe.webhooks.constructEvent(body, sig, process.env.STRIPE_WEBHOOK_SECRET!);
   } catch (err) {
     const msg = err instanceof Error ? err.message : "Invalid signature";
     return NextResponse.json({ error: msg }, { status: 400 });
@@ -127,8 +145,9 @@ export async function POST(req: Request) {
           );
         }
 
-        const sub = await stripe.subscriptions.retrieve(stripeSubId);
-        const s = sub as unknown as StripeSubRuntime;
+        const full = await stripe.subscriptions.retrieve(stripeSubId);
+        const s = full as unknown as StripeSubRuntime;
+        const { start, end } = extractPeriod(s);
 
         await upsertSubscription({
           userId,
@@ -136,8 +155,8 @@ export async function POST(req: Request) {
           stripeSubId: s.id,
           status: mapStripeStatus(s.status),
           tier,
-          periodStart: s.current_period_start ?? null,
-          periodEnd: s.current_period_end ?? null,
+          periodStart: start,
+          periodEnd: end,
           cancelAtPeriodEnd: s.cancel_at_period_end,
           cancelAt: s.cancel_at ?? null,
           canceledAt: s.canceled_at ?? null,
@@ -148,9 +167,13 @@ export async function POST(req: Request) {
 
       case "customer.subscription.updated":
       case "customer.subscription.deleted": {
-        const sub = event.data.object as Stripe.Subscription;
-        const s = sub as unknown as StripeSubRuntime;
+        const eventSub = event.data.object as Stripe.Subscription;
+        const subId = eventSub.id;
+
+        const full = await stripe.subscriptions.retrieve(subId);
+        const s = full as unknown as StripeSubRuntime;
         const customerId = s.customer as string;
+        const { start, end } = extractPeriod(s);
 
         const row =
           (
@@ -175,8 +198,8 @@ export async function POST(req: Request) {
             stripeSubId: s.id,
             status: mapStripeStatus(s.status),
             tier: row.tier,
-            periodStart: s.current_period_start ?? null,
-            periodEnd: s.current_period_end ?? null,
+            periodStart: start,
+            periodEnd: end,
             cancelAtPeriodEnd: s.cancel_at_period_end,
             cancelAt: s.cancel_at ?? null,
             canceledAt: s.canceled_at ?? null,

@@ -21,16 +21,20 @@ export default async function DashboardPage() {
 
   const { data: sub } = await supabase
     .from("subscriptions")
-    .select("status,tier,current_period_end,cancel_at_period_end,cancel_at")
+    .select("status,tier,current_period_end,cancel_at")
     .eq("user_id", user.id)
     .maybeSingle();
 
   const status = sub?.status ?? "canceled";
   const tier = sub?.tier ?? "esencial";
+
   const isActive = status === "active";
 
-  const willCancel = Boolean(sub?.cancel_at) || Boolean(sub?.cancel_at_period_end);
-  const cancelDate = sub?.cancel_at ?? sub?.current_period_end;
+  // ✅ Fuente de verdad: cancel_at (si existe), si no, current_period_end (si lo guardas)
+  const cancelDate = sub?.cancel_at ?? sub?.current_period_end ?? null;
+
+  // ✅ “Cancelación programada” si sigue activa pero ya hay fecha de fin programada
+  const scheduledCancel = isActive && !!cancelDate;
 
   return (
     <main className="p-8">
@@ -45,11 +49,11 @@ export default async function DashboardPage() {
           <p className="font-medium">✅ Suscripción activa</p>
           <p className="text-sm opacity-80">Plan: {tier}</p>
 
-          {willCancel && cancelDate && (
+          {scheduledCancel && (
             <p className="mt-2 text-sm">
               ⚠️ Tu suscripción se cancelará el{" "}
               <span className="font-medium">
-                {new Date(cancelDate).toLocaleDateString("es-ES", {
+                {new Date(cancelDate!).toLocaleDateString("es-ES", {
                   year: "numeric",
                   month: "long",
                   day: "numeric",
@@ -59,7 +63,9 @@ export default async function DashboardPage() {
             </p>
           )}
 
-          <ManageSubscriptionButton userId={user.id} />
+          <div className="mt-4">
+            <ManageSubscriptionButton userId={user.id} />
+          </div>
         </div>
       ) : (
         <div className="mt-4 rounded-md border p-4">
@@ -67,6 +73,21 @@ export default async function DashboardPage() {
           <p className="text-sm opacity-80">
             Estado: <span className="font-medium">{status}</span>
           </p>
+
+          {/* Opcional: si tienes cancelDate guardada también para estado canceled */}
+          {cancelDate && (
+            <p className="mt-2 text-sm opacity-80">
+              Tu acceso finalizó el{" "}
+              <span className="font-medium">
+                {new Date(cancelDate).toLocaleDateString("es-ES", {
+                  year: "numeric",
+                  month: "long",
+                  day: "numeric",
+                })}
+              </span>
+              .
+            </p>
+          )}
 
           <div className="mt-4">
             <SubscribeButton userId={user.id} tier="esencial" />
