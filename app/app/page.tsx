@@ -20,21 +20,20 @@ export default async function DashboardPage() {
   if (!error && admin) redirect("/admin");
 
   const { data: sub } = await supabase
-    .from("subscriptions")
-    .select("status,tier,current_period_end,cancel_at")
-    .eq("user_id", user.id)
-    .maybeSingle();
+  .from("subscriptions")
+  .select("status,tier,current_period_end,cancel_at,cancel_at_period_end")
+  .eq("user_id", user.id)
+  .maybeSingle();
 
-  const status = sub?.status ?? "canceled";
-  const tier = sub?.tier ?? "esencial";
+const status = sub?.status ?? "canceled";
+const tier = sub?.tier ?? "esencial";
 
-  const isActive = status === "active";
+const isActive = status === "active";
 
-  // ✅ Fuente de verdad: cancel_at (si existe), si no, current_period_end (si lo guardas)
-  const cancelDate = sub?.cancel_at ?? sub?.current_period_end ?? null;
-
-  // ✅ “Cancelación programada” si sigue activa pero ya hay fecha de fin programada
-  const scheduledCancel = isActive && !!cancelDate;
+const scheduledCancel = isActive && sub?.cancel_at_period_end === true;
+const cancelDate = scheduledCancel
+  ? sub?.cancel_at ?? sub?.current_period_end ?? null
+  : null;
 
   return (
     <main className="p-8">

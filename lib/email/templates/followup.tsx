@@ -1,17 +1,28 @@
 interface FollowupEmailProps {
     userName?: string | null;
-    dayOffset: number;
+    heading?: string | null;
+    body?: string | null;
+    ctaLabel?: string | null;
+    ctaUrl?: string | null;
   }
   
   export function renderFollowupEmail({
     userName,
-    dayOffset,
+    heading,
+    body,
+    ctaLabel,
+    ctaUrl,
   }: FollowupEmailProps) {
     return `
-      <div style="font-family: Arial, sans-serif; line-height: 1.6;">
-        <h1>Seguimiento técnico</h1>
-        <p>Hola${userName ? `, ${userName}` : ""}.</p>
-        <p>Este es tu correo de seguimiento correspondiente al día ${dayOffset} de tu ciclo.</p>
+      <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #111;">
+        <h1>${heading ?? "Seguimiento técnico"}</h1>
+        ${userName ? `<p>Hola, ${userName}.</p>` : ""}
+        ${body ? `<p>${body}</p>` : `<p>Te enviamos este correo de seguimiento.</p>`}
+        ${
+          ctaLabel && ctaUrl
+            ? `<p><a href="${ctaUrl}" style="display:inline-block;padding:12px 18px;background:#111;color:#fff;text-decoration:none;border-radius:8px;">${ctaLabel}</a></p>`
+            : ""
+        }
       </div>
     `;
   }
