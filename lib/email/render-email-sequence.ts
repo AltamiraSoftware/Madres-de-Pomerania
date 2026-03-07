@@ -2,6 +2,7 @@ import type { EmailSequence } from "./types";
 import { renderWelcomeEmail } from "./templates/welcome";
 import { renderFollowupEmail } from "./templates/followup";
 import { renderDossierUnlockEmail } from "./templates/dossier-unlock";
+import { resolveEmailUrl } from "./resolve-email-url";
 
 interface RenderEmailSequenceInput {
   sequence: EmailSequence;
@@ -14,6 +15,8 @@ export function renderEmailSequence({
   userName,
   dossierTitle,
 }: RenderEmailSequenceInput): string {
+  const resolvedCtaUrl = resolveEmailUrl(sequence.cta_url);
+
   switch (sequence.template_key) {
     case "welcome_d0":
       return renderWelcomeEmail({
@@ -21,7 +24,7 @@ export function renderEmailSequence({
         heading: sequence.heading,
         body: sequence.body,
         ctaLabel: sequence.cta_label,
-        ctaUrl: sequence.cta_url,
+        ctaUrl: resolvedCtaUrl,
         dossierTitle,
       });
 
@@ -33,7 +36,7 @@ export function renderEmailSequence({
         heading: sequence.heading,
         body: sequence.body,
         ctaLabel: sequence.cta_label,
-        ctaUrl: sequence.cta_url,
+        ctaUrl: resolvedCtaUrl,
       });
 
     case "dossier_unlock":
@@ -42,7 +45,7 @@ export function renderEmailSequence({
         heading: sequence.heading,
         body: sequence.body,
         ctaLabel: sequence.cta_label,
-        ctaUrl: sequence.cta_url,
+        ctaUrl: resolvedCtaUrl,
         dossierTitle,
         monthIndex: sequence.month_index,
       });
@@ -53,7 +56,7 @@ export function renderEmailSequence({
         heading: sequence.heading,
         body: sequence.body,
         ctaLabel: sequence.cta_label,
-        ctaUrl: sequence.cta_url,
+        ctaUrl: resolvedCtaUrl,
       });
   }
 }
