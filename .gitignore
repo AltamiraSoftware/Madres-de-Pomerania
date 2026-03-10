@@ -46,3 +46,5 @@ Thumbs.db
 
 # turbo
 .turbo
+# project documentation / AI context
+/docs

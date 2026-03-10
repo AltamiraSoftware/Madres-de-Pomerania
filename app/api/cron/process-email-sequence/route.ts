@@ -15,10 +15,6 @@ type ActiveSubscriptionRow = {
   status: "active" | "past_due" | "canceled";
   program_days_consumed: number;
   program_last_resumed_at: string | null;
-  profiles: Array<{
-    email: string | null;
-    full_name: string | null;
-  }> | null;
 };
 
 function isAuthorizedCronRequest(req: Request) {
@@ -30,6 +26,23 @@ function isAuthorizedCronRequest(req: Request) {
   }
 
   return authHeader === `Bearer ${cronSecret}`;
+}
+
+async function getProfile(userId: string): Promise<{
+  email: string | null;
+  full_name: string | null;
+} | null> {
+  const { data, error } = await supabaseAdmin
+    .from("profiles")
+    .select("email, full_name")
+    .eq("id", userId)
+    .maybeSingle();
+
+  if (error) {
+    throw new Error(`Error fetching profile: ${error.message}`);
+  }
+
+  return data;
 }
 
 export async function POST(req: Request) {
@@ -48,11 +61,7 @@ export async function POST(req: Request) {
         tier,
         status,
         program_days_consumed,
-        program_last_resumed_at,
-        profiles (
-          email,
-          full_name
-        )
+        program_last_resumed_at
       `)
       .eq("status", "active");
 
@@ -60,7 +69,7 @@ export async function POST(req: Request) {
       throw new Error(`Error fetching active subscriptions: ${error.message}`);
     }
 
-    const subscriptions = (data ?? []) as unknown as ActiveSubscriptionRow[];
+    const subscriptions = (data ?? []) as ActiveSubscriptionRow[];
 
     const results: Array<{
       userId: string;
@@ -72,7 +81,7 @@ export async function POST(req: Request) {
 
     for (const subscription of subscriptions) {
       try {
-        const profile = subscription.profiles?.[0] ?? null;
+        const profile = await getProfile(subscription.user_id);
         const email = profile?.email ?? null;
         const fullName = profile?.full_name ?? null;
 
