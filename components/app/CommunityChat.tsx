@@ -19,6 +19,8 @@ interface CommunityChatProps {
   subtitle?: string;
   closeHref?: string;
   closeLabel?: string;
+  launcherTitle?: string;
+  launcherDescription?: string;
 }
 
 function formatMessageTime(date: string) {
@@ -62,6 +64,8 @@ export default function CommunityChat({
   subtitle = "Un chat cuidado, cercano y elegante para compartir avances, dudas y pequenas victorias.",
   closeHref,
   closeLabel = "Cerrar",
+  launcherTitle = "Chat privado",
+  launcherDescription = "Abre la conversacion en un modal centrado, limpio y pensado para leer y responder sin distracciones.",
 }: CommunityChatProps) {
   const supabase = useMemo(() => createClient(), []);
   const [messages, setMessages] = useState(initialMessages);
@@ -71,8 +75,8 @@ export default function CommunityChat({
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
-  const listRef = useRef<HTMLDivElement>(null);
   const modalListRef = useRef<HTMLDivElement>(null);
+  const modalTitle = "Sala privada de madres de Pomerania";
 
   useEffect(() => {
     setIsMounted(true);
@@ -84,13 +88,11 @@ export default function CommunityChat({
   }, [initialMessages]);
 
   useEffect(() => {
-    const list = listRef.current;
-    if (!list) {
-      return;
+    const list = modalListRef.current;
+    if (list) {
+      list.scrollTop = list.scrollHeight;
     }
-
-    list.scrollTop = list.scrollHeight;
-  }, [messages]);
+  }, [messages, isModalOpen]);
 
   useEffect(() => {
     if (!isModalOpen) {
@@ -237,25 +239,12 @@ export default function CommunityChat({
               <p className="text-[11px] uppercase tracking-[0.28em] text-[#efe0cf]">
                 Chat privado
               </p>
-              <h2 className="mt-3 font-serif text-3xl leading-tight md:text-4xl">
-                {title}
+              <h2 className="mt-2 max-w-xl font-serif text-[1.7rem] leading-tight md:mt-3 md:text-4xl">
+                {modalTitle}
               </h2>
-              <p className="mt-3 max-w-xl text-sm leading-6 text-[#f1e3d3] md:text-[15px]">
-                {subtitle}
-              </p>
             </div>
 
             <div className="flex items-center gap-2">
-              {!modal ? (
-                <button
-                  type="button"
-                  onClick={() => setIsModalOpen(true)}
-                  className="inline-flex min-w-[116px] items-center justify-center rounded-full border border-white/20 bg-white/10 px-4 py-3 text-xs font-medium uppercase tracking-[0.18em] text-[#fff7ee] transition hover:bg-white/18"
-                >
-                  Abrir modal
-                </button>
-              ) : null}
-
               {modal ? (
                 <button
                   type="button"
@@ -281,19 +270,6 @@ export default function CommunityChat({
             </div>
           </div>
 
-          <div className="relative mt-5 flex flex-wrap items-center gap-3 text-sm text-[#f6eadc]">
-            <div className="rounded-full border border-white/15 bg-white/10 px-3 py-2">
-              Participando como <span className="font-medium text-white">{currentDisplayName}</span>
-            </div>
-            <div className="rounded-full border border-white/15 bg-white/10 px-3 py-2">
-              {isRefreshing
-                ? "Actualizando mensajes..."
-                : `${messages.length} mensaje${messages.length === 1 ? "" : "s"} visibles`}
-            </div>
-            <div className="rounded-full border border-white/15 bg-white/10 px-3 py-2">
-              Ambiente sereno y privado
-            </div>
-          </div>
         </header>
 
         <div className="flex flex-1 flex-col overflow-hidden">
@@ -390,7 +366,7 @@ export default function CommunityChat({
 
           <footer className="border-t border-[#eadbc9] bg-[linear-gradient(180deg,#fffdfa,#f8f0e5)] px-4 py-4 md:px-6 md:py-5">
             <div className="mx-auto flex w-full max-w-4xl flex-col gap-3">
-              <div className="grid gap-3 text-[11px] uppercase tracking-[0.18em] text-[#8f7962] md:grid-cols-3">
+              <div className="hidden gap-3 text-[11px] uppercase tracking-[0.18em] text-[#8f7962] md:grid md:grid-cols-3">
                 <span>Claro y respetuoso</span>
                 <span>Una idea por mensaje</span>
                 <span>Comunidad privada</span>
@@ -411,13 +387,13 @@ export default function CommunityChat({
                         : "Ahora mismo no puedes enviar mensajes."
                     }
                     disabled={!canSend || isSending}
-                    rows={3}
-                    className="min-h-[112px] w-full rounded-[24px] border border-[#e1d4c4] bg-white px-4 py-4 text-sm leading-6 text-[#241a12] outline-none transition focus:border-[#2d2218] focus:shadow-[0_0_0_4px_rgba(45,34,24,0.06)] disabled:cursor-not-allowed disabled:opacity-70"
+                    rows={2}
+                    className="min-h-[88px] w-full rounded-[24px] border border-[#e1d4c4] bg-white px-4 py-3 text-sm leading-6 text-[#241a12] outline-none transition focus:border-[#2d2218] focus:shadow-[0_0_0_4px_rgba(45,34,24,0.06)] disabled:cursor-not-allowed disabled:opacity-70 md:min-h-[112px] md:py-4"
                   />
                 </label>
 
                 <div className="flex items-center justify-between gap-3 md:w-[210px] md:flex-col md:items-stretch">
-                  <p className="text-xs leading-5 text-[#7b6a58]">
+                  <p className="hidden text-xs leading-5 text-[#7b6a58] md:block">
                     Maximo 1500 caracteres.
                   </p>
                   <button
@@ -440,11 +416,47 @@ export default function CommunityChat({
 
   return (
     <>
-      <section className="relative overflow-hidden rounded-[38px] bg-[radial-gradient(circle_at_top,rgba(47,35,24,0.16),transparent_36%),linear-gradient(180deg,#efe4d5_0%,#e7dac8_100%)] p-4 shadow-[0_30px_90px_rgba(81,58,33,0.12)] md:p-6">
-        <div className="pointer-events-none absolute inset-0 bg-[rgba(35,25,18,0.22)] backdrop-blur-[7px]" />
-        <div className="pointer-events-none absolute -left-16 top-10 h-40 w-40 rounded-full bg-[#f4dcb6]/30 blur-3xl" />
-        <div className="pointer-events-none absolute -right-20 bottom-16 h-52 w-52 rounded-full bg-[#caa57f]/18 blur-3xl" />
-        {renderChatShell({ scrollRef: listRef })}
+      <section className="relative overflow-hidden rounded-[32px] border border-[#ddd1c0] bg-[linear-gradient(180deg,rgba(255,251,246,0.96),rgba(249,241,231,0.92))] p-5 shadow-[0_20px_54px_rgba(81,58,33,0.08)] md:p-6">
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(47,35,24,0.06),transparent_34%)]" />
+        <div className="relative flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
+          <div className="max-w-2xl">
+            <p className="text-[11px] uppercase tracking-[0.24em] text-[#8f7962]">
+              {launcherTitle}
+            </p>
+            <h3 className="mt-2 font-serif text-3xl text-[#241a12]">
+              {title}
+            </h3>
+            <p className="mt-3 text-sm leading-6 text-[#625549]">
+              {subtitle}
+            </p>
+            <p className="mt-3 text-sm leading-6 text-[#7b6a58]">
+              {launcherDescription}
+            </p>
+            <div className="mt-4 flex flex-wrap items-center gap-2 text-sm text-[#6f5f50]">
+              <div className="rounded-full border border-[#e0d3c2] bg-white/80 px-3 py-2 text-xs md:text-sm">
+                Participando como <span className="font-medium text-[#241a12]">{currentDisplayName}</span>
+              </div>
+              <div className="rounded-full border border-[#e0d3c2] bg-white/80 px-3 py-2 text-xs md:text-sm">
+                {isRefreshing
+                  ? "Actualizando mensajes..."
+                  : `${messages.length} mensaje${messages.length === 1 ? "" : "s"} visibles`}
+              </div>
+              <div className="rounded-full border border-[#e0d3c2] bg-white/80 px-3 py-2 text-xs md:text-sm">
+                Ambiente sereno y privado
+              </div>
+            </div>
+          </div>
+
+          <div className="flex flex-col gap-3 md:min-w-[220px] md:items-end">
+            <button
+              type="button"
+              onClick={() => setIsModalOpen(true)}
+              className="inline-flex items-center justify-center rounded-full border border-[#251b12] bg-[#251b12] px-5 py-3 text-sm font-medium text-[#f8efe3] shadow-[0_12px_28px_rgba(37,27,18,0.14)] transition hover:bg-[#3a2c1f]"
+            >
+              Abrir chat
+            </button>
+          </div>
+        </div>
       </section>
 
       {isMounted && isModalOpen
