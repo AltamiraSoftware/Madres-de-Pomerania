@@ -17,6 +17,12 @@ type ActiveSubscriptionRow = {
   program_last_resumed_at: string | null;
 };
 
+function getDebugDate(raw: string | null): Date | null {
+  if (!raw) return null;
+  const parsed = new Date(raw);
+  return Number.isNaN(parsed.getTime()) ? null : parsed;
+}
+
 function isAuthorizedCronRequest(req: Request) {
   const authHeader = req.headers.get("authorization");
   const cronSecret = process.env.CRON_SECRET;
@@ -46,24 +52,48 @@ async function getProfile(userId: string): Promise<{
 }
 
 export async function POST(req: Request) {
+  return handleCronRequest(req);
+}
+
+export async function GET(req: Request) {
+  return handleCronRequest(req);
+}
+
+async function handleCronRequest(req: Request) {
   try {
     if (!isAuthorizedCronRequest(req)) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const today = new Date();
+    const url = new URL(req.url);
+    const debugNow = getDebugDate(url.searchParams.get("now"));
+    const debugUserId = url.searchParams.get("userId");
+
+    if (url.searchParams.get("now") && !debugNow) {
+      return NextResponse.json(
+        { ok: false, error: "Invalid now param. Use ISO datetime." },
+        { status: 400 }
+      );
+    }
+
+    const today = debugNow ?? new Date();
     const scheduledFor = toISODate(today);
 
-    const { data, error } = await supabaseAdmin
-      .from("subscriptions")
-      .select(`
+    let query = supabaseAdmin.from("subscriptions").select(`
         user_id,
         tier,
         status,
         program_days_consumed,
         program_last_resumed_at
-      `)
-      .eq("status", "active");
+      `);
+
+    query = query.eq("status", "active");
+
+    if (debugUserId) {
+      query = query.eq("user_id", debugUserId);
+    }
+
+    const { data, error } = await query;
 
     if (error) {
       throw new Error(`Error fetching active subscriptions: ${error.message}`);
@@ -73,6 +103,10 @@ export async function POST(req: Request) {
 
     const results: Array<{
       userId: string;
+      effectiveProgramDays?: number;
+      currentSegmentDays?: number;
+      programDaysConsumed?: number;
+      programLastResumedAt?: string | null;
       monthIndex?: number;
       dayOffset?: number;
       status: "sent" | "skipped" | "error";
@@ -106,6 +140,10 @@ export async function POST(req: Request) {
         if (!shouldSendSequenceForDay(dayInCycle)) {
           results.push({
             userId: subscription.user_id,
+            effectiveProgramDays: progress.effectiveProgramDays,
+            currentSegmentDays: progress.currentSegmentDays,
+            programDaysConsumed: subscription.program_days_consumed,
+            programLastResumedAt: subscription.program_last_resumed_at,
             monthIndex,
             dayOffset: dayInCycle,
             status: "skipped",
@@ -126,6 +164,10 @@ export async function POST(req: Request) {
           if (!unlock.ok) {
             results.push({
               userId: subscription.user_id,
+              effectiveProgramDays: progress.effectiveProgramDays,
+              currentSegmentDays: progress.currentSegmentDays,
+              programDaysConsumed: subscription.program_days_consumed,
+              programLastResumedAt: subscription.program_last_resumed_at,
               monthIndex,
               dayOffset: dayInCycle,
               status: "error",
@@ -150,6 +192,10 @@ export async function POST(req: Request) {
 
         results.push({
           userId: subscription.user_id,
+          effectiveProgramDays: progress.effectiveProgramDays,
+          currentSegmentDays: progress.currentSegmentDays,
+          programDaysConsumed: subscription.program_days_consumed,
+          programLastResumedAt: subscription.program_last_resumed_at,
           monthIndex,
           dayOffset: dayInCycle,
           status: sendResult.ok
@@ -162,6 +208,8 @@ export async function POST(req: Request) {
       } catch (innerError) {
         results.push({
           userId: subscription.user_id,
+          programDaysConsumed: subscription.program_days_consumed,
+          programLastResumedAt: subscription.program_last_resumed_at,
           status: "error",
           detail:
             innerError instanceof Error
@@ -173,6 +221,11 @@ export async function POST(req: Request) {
 
     return NextResponse.json({
       ok: true,
+      debug: {
+        now: today.toISOString(),
+        scheduledFor,
+        userId: debugUserId ?? null,
+      },
       processed: subscriptions.length,
       results,
     });
