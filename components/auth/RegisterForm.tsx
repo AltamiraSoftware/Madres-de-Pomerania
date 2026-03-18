@@ -8,6 +8,7 @@ export function RegisterForm() {
   const supabase = createClient();
   const { close, openLogin } = useAuthModal();
 
+  const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [pending, setPending] = useState(false);
@@ -18,7 +19,40 @@ export function RegisterForm() {
     setPending(true);
     setError(null);
 
-    const { error } = await supabase.auth.signUp({ email, password });
+    const trimmedFullName = fullName.trim();
+
+    if (!trimmedFullName) {
+      setPending(false);
+      setError("Escribe tu nombre para continuar.");
+      return;
+    }
+
+    const { data, error } = await supabase.auth.signUp({
+      email,
+      password,
+      options: {
+        data: {
+          full_name: trimmedFullName,
+        },
+      },
+    });
+
+    if (!error && data.user?.id) {
+      const { error: profileError } = await supabase
+        .from("profiles")
+        .update({
+          email,
+          full_name: trimmedFullName,
+        })
+        .eq("id", data.user.id);
+
+      if (profileError) {
+        setPending(false);
+        setError(`No se pudo guardar tu nombre: ${profileError.message}`);
+        return;
+      }
+    }
+
     setPending(false);
 
     if (error) return setError(error.message);
@@ -29,6 +63,13 @@ export function RegisterForm() {
 
   return (
     <form onSubmit={onSubmit} className="space-y-3">
+      <input
+        className="w-full rounded-2xl border border-black/10 bg-white/70 p-3 outline-none focus:ring-2 focus:ring-[#B08D57]/40"
+        placeholder="Tu nombre"
+        value={fullName}
+        onChange={(e) => setFullName(e.target.value)}
+        autoComplete="name"
+      />
       <input
         className="w-full rounded-2xl border border-black/10 bg-white/70 p-3 outline-none focus:ring-2 focus:ring-[#B08D57]/40"
         placeholder="Email"

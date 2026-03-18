@@ -112,3 +112,56 @@ export async function POST(request: Request) {
 
   return NextResponse.json({ ok: true });
 }
+
+export async function DELETE(request: Request) {
+  const viewer = await getChatViewerContext();
+
+  if (!viewer) {
+    return forbidden("Debes iniciar sesion para gestionar la comunidad.", 401);
+  }
+
+  if (!viewer.isAdmin) {
+    return forbidden("Solo admin puede borrar mensajes.");
+  }
+
+  if (!viewer.room) {
+    return NextResponse.json(
+      { error: "La sala principal de la comunidad no esta disponible." },
+      { status: 404 }
+    );
+  }
+
+  const { searchParams } = new URL(request.url);
+  const messageId = searchParams.get("id")?.trim() ?? "";
+
+  if (!messageId) {
+    return NextResponse.json(
+      { error: "Falta el identificador del mensaje." },
+      { status: 400 }
+    );
+  }
+
+  const { error, data } = await supabaseAdmin
+    .from("chat_messages")
+    .delete()
+    .eq("id", messageId)
+    .eq("room_id", viewer.room.id)
+    .select("id")
+    .maybeSingle();
+
+  if (error) {
+    return NextResponse.json(
+      { error: `No se pudo borrar el mensaje: ${error.message}` },
+      { status: 500 }
+    );
+  }
+
+  if (!data) {
+    return NextResponse.json(
+      { error: "El mensaje ya no existe o no pertenece a esta sala." },
+      { status: 404 }
+    );
+  }
+
+  return NextResponse.json({ ok: true });
+}

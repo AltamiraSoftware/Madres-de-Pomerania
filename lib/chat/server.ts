@@ -150,7 +150,14 @@ export async function getChatViewerContext(): Promise<ChatViewerContext | null> 
   return {
     userId: user.id,
     email: profile?.email ?? user.email ?? null,
-    displayName: profile?.full_name ?? profile?.email ?? user.email ?? "Miembro",
+    displayName:
+      profile?.full_name ??
+      (typeof user.user_metadata?.full_name === "string"
+        ? user.user_metadata.full_name
+        : null) ??
+      profile?.email ??
+      user.email ??
+      "Miembro",
     hasActiveSubscription: subscription?.status === "active",
     tier: subscription?.tier ?? null,
     isAdmin: Boolean(adminResult.data),

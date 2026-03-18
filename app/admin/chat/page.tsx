@@ -141,6 +141,7 @@ export default async function AdminChatPage() {
             subtitle="Vista operativa del chat en formato modal premium, con respuesta directa del equipo bajo la firma Mama de Boo."
             closeHref="/admin"
             closeLabel="Volver al admin"
+            canDeleteMessages
           />
         </div>
       </section>

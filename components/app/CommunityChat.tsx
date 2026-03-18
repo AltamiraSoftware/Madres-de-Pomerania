@@ -21,6 +21,7 @@ interface CommunityChatProps {
   closeLabel?: string;
   launcherTitle?: string;
   launcherDescription?: string;
+  canDeleteMessages?: boolean;
 }
 
 function formatMessageTime(date: string) {
@@ -66,11 +67,13 @@ export default function CommunityChat({
   closeLabel = "Cerrar",
   launcherTitle = "Chat privado",
   launcherDescription = "Abre la conversacion en un modal centrado, limpio y pensado para leer y responder sin distracciones.",
+  canDeleteMessages = false,
 }: CommunityChatProps) {
   const supabase = useMemo(() => createClient(), []);
   const [messages, setMessages] = useState(initialMessages);
   const [body, setBody] = useState("");
   const [isSending, setIsSending] = useState(false);
+  const [deletingMessageId, setDeletingMessageId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -216,6 +219,47 @@ export default function CommunityChat({
     }
   }
 
+  async function handleDeleteMessage(messageId: string) {
+    if (!canDeleteMessages || deletingMessageId) {
+      return;
+    }
+
+    const confirmed = window.confirm(
+      "Este mensaje se borrara del chat y de la base de datos. Quieres continuar?"
+    );
+
+    if (!confirmed) {
+      return;
+    }
+
+    setDeletingMessageId(messageId);
+    setError(null);
+
+    try {
+      const response = await fetch(`/api/chat/messages?id=${encodeURIComponent(messageId)}`, {
+        method: "DELETE",
+      });
+
+      const payload = (await response.json().catch(() => null)) as
+        | { ok?: boolean; error?: string }
+        | null;
+
+      if (!response.ok) {
+        throw new Error(payload?.error ?? "No se pudo borrar el mensaje.");
+      }
+
+      setMessages((current) => current.filter((message) => message.id !== messageId));
+    } catch (deleteError) {
+      setError(
+        deleteError instanceof Error
+          ? deleteError.message
+          : "No se pudo borrar el mensaje."
+      );
+    } finally {
+      setDeletingMessageId(null);
+    }
+  }
+
   function renderChatShell({
     modal = false,
     scrollRef,
@@ -346,6 +390,25 @@ export default function CommunityChat({
                               <span className="capitalize">{formatDayLabel(message.createdAt)}</span>
                             </div>
                           </div>
+
+                          {canDeleteMessages ? (
+                            <button
+                              type="button"
+                              onClick={() => void handleDeleteMessage(message.id)}
+                              disabled={deletingMessageId === message.id}
+                              className={cn(
+                                "shrink-0 rounded-full border px-3 py-1 text-[11px] uppercase tracking-[0.16em] transition",
+                                isOwn
+                                  ? "border-white/20 bg-white/10 text-[#f3dfc8] hover:bg-white/16"
+                                  : "border-[#e5d8ca] bg-[#fcf7f1] text-[#7d644d] hover:bg-[#f4ebdf]",
+                                deletingMessageId === message.id
+                                  ? "cursor-not-allowed opacity-60"
+                                  : ""
+                              )}
+                            >
+                              {deletingMessageId === message.id ? "Borrando" : "Borrar"}
+                            </button>
+                          ) : null}
                         </div>
 
                         <p
