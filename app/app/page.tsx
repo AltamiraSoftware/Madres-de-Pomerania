@@ -1,3 +1,4 @@
+import Link from "next/link";
 import CheckoutStatusBanner from "@/components/app/CheckoutStatusBanner";
 import ClientDashboardShell from "@/components/app/ClientDashboardShell";
 import ManageSubscriptionButton from "@/components/app/ManageSubscriptionButton";
@@ -157,6 +158,32 @@ export default async function DashboardPage() {
             </div>
           </section>
         )}
+
+        <section className="grid gap-4 xl:grid-cols-3">
+          <article className="rounded-[26px] border border-[#ddd1c0] bg-white/92 p-5 shadow-[0_14px_38px_rgba(90,70,45,0.05)]">
+            <p className="text-[11px] uppercase tracking-[0.2em] text-[#8f7962]">Comunidad</p>
+            <h3 className="mt-3 font-serif text-3xl text-[#241a12]">Chat privado</h3>
+            <p className="mt-3 text-sm leading-6 text-[#625549]">Un espacio compartido para conversar con otras miembros del programa en tiempo real.</p>
+            <Link
+              href="/app/comunidad"
+              className="mt-5 inline-flex items-center justify-center rounded-full border border-[#251b12] bg-[#251b12] px-4 py-2 text-sm text-[#f8efe3] transition-colors hover:bg-[#3a2c1f]"
+            >
+              Abrir comunidad
+            </Link>
+          </article>
+
+          <article className="rounded-[26px] border border-[#ddd1c0] bg-white/92 p-5 shadow-[0_14px_38px_rgba(90,70,45,0.05)]">
+            <p className="text-[11px] uppercase tracking-[0.2em] text-[#8f7962]">Biblioteca</p>
+            <h3 className="mt-3 font-serif text-3xl text-[#241a12]">{dossiers.length}</h3>
+            <p className="mt-3 text-sm leading-6 text-[#625549]">Dossiers disponibles en tu espacio privado y ordenados segun tu avance.</p>
+          </article>
+
+          <article className="rounded-[26px] border border-[#ddd1c0] bg-white/92 p-5 shadow-[0_14px_38px_rgba(90,70,45,0.05)]">
+            <p className="text-[11px] uppercase tracking-[0.2em] text-[#8f7962]">Proximo paso</p>
+            <h3 className="mt-3 font-serif text-3xl text-[#241a12]">{latestDossierLabel}</h3>
+            <p className="mt-3 text-sm leading-6 text-[#625549]">Tu panel ya esta preparado para futuras secciones como comunidad, VIP y soporte.</p>
+          </article>
+        </section>
 
         <section
           id="dossiers"

@@ -23,10 +23,9 @@ const navItems = [
     description: "Biblioteca privada del programa",
   },
   {
-    href: "#",
-    label: "Chat",
-    description: "Proximamente",
-    disabled: true,
+    href: "/app/comunidad",
+    label: "Comunidad",
+    description: "Chat privado entre miembros",
   },
   {
     href: "#",
@@ -158,7 +157,7 @@ export default function ClientDashboardShell({
               </div>
 
               <div className="rounded-[24px] border border-[#e2d4c3] bg-white/80 px-4 py-3 text-sm text-[#5f5347] shadow-[0_10px_24px_rgba(95,83,71,0.06)]">
-                Biblioteca desbloqueada · {dossierCount} items
+                Biblioteca desbloqueada - {dossierCount} items
               </div>
             </div>
           </div>
@@ -169,3 +168,4 @@ export default function ClientDashboardShell({
     </main>
   );
 }
+

@@ -74,7 +74,7 @@ export default async function AdminPage() {
         </div>
       </section>
 
-      <section className="grid gap-4 lg:grid-cols-2">
+      <section className="grid gap-4 lg:grid-cols-3">
         <article className="rounded-[28px] border border-[#ddd1c0] bg-white/90 p-6 shadow-[0_14px_38px_rgba(90,70,45,0.05)]">
           <p className="text-[11px] uppercase tracking-[0.24em] text-[#8f7962]">
             Gestion editorial
@@ -110,6 +110,24 @@ export default async function AdminPage() {
             className="mt-6 inline-flex rounded-full border border-[#251b12] bg-[#251b12] px-4 py-2 text-sm text-[#f8efe3] transition-colors hover:bg-[#3a2c1f]"
           >
             Abrir dossiers
+          </Link>
+        </article>
+
+        <article className="rounded-[28px] border border-[#ddd1c0] bg-white/90 p-6 shadow-[0_14px_38px_rgba(90,70,45,0.05)]">
+          <p className="text-[11px] uppercase tracking-[0.24em] text-[#8f7962]">
+            Comunidad
+          </p>
+          <h3 className="mt-3 font-serif text-3xl text-[#251b12]">
+            Moderacion del chat
+          </h3>
+          <p className="mt-3 text-sm leading-6 text-[#625448]">
+            Revisa participantes activos, aplica silencios temporales y bloqueos sin tocar el resto del sistema.
+          </p>
+          <Link
+            href="/admin/chat"
+            className="mt-6 inline-flex rounded-full border border-[#251b12] bg-[#251b12] px-4 py-2 text-sm text-[#f8efe3] transition-colors hover:bg-[#3a2c1f]"
+          >
+            Abrir chat
           </Link>
         </article>
       </section>

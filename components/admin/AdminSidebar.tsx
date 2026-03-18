@@ -20,6 +20,11 @@ const navItems = [
     label: "Dossiers",
     description: "PDFs y biblioteca privada",
   },
+  {
+    href: "/admin/chat",
+    label: "Chat",
+    description: "Moderacion de comunidad",
+  },
 ];
 
 export default function AdminSidebar() {

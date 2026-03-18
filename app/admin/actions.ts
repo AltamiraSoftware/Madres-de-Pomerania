@@ -63,6 +63,98 @@ export async function updateEmailSequenceAction(
   };
 }
 
+export async function updateChatModerationAction(
+  roomId: string,
+  userId: string,
+  _prevState: AdminActionState,
+  formData: FormData
+): Promise<AdminActionState> {
+  await requireAdmin();
+
+  const intent = typeof formData.get("intent") === "string" ? String(formData.get("intent")) : "";
+  const reason = valueOrNull(formData.get("reason"));
+  const mutedUntilValue = valueOrNull(formData.get("muted_until"));
+  const mutedUntil = mutedUntilValue ? new Date(mutedUntilValue).toISOString() : null;
+
+  if (!["mute", "unmute", "block", "unblock"].includes(intent)) {
+    return {
+      success: false,
+      message: "No se pudo interpretar la accion de moderacion.",
+    };
+  }
+
+  if ((intent === "mute" || intent === "block") && !reason) {
+    return {
+      success: false,
+      message: "Anade un motivo para registrar la moderacion.",
+    };
+  }
+
+  const { data: currentModeration, error: currentModerationError } = await supabaseAdmin
+    .from("chat_user_moderation")
+    .select("is_muted, is_blocked, muted_until, reason")
+    .eq("room_id", roomId)
+    .eq("user_id", userId)
+    .maybeSingle();
+
+  if (currentModerationError) {
+    return {
+      success: false,
+      message: `No se pudo cargar la moderacion actual: ${currentModerationError.message}`,
+    };
+  }
+
+  const updates = {
+    room_id: roomId,
+    user_id: userId,
+    is_muted:
+      intent === "mute"
+        ? true
+        : intent === "unmute"
+          ? false
+          : currentModeration?.is_muted ?? false,
+    is_blocked:
+      intent === "block"
+        ? true
+        : intent === "unblock"
+          ? false
+          : currentModeration?.is_blocked ?? false,
+    muted_until:
+      intent === "mute"
+        ? mutedUntil
+        : intent === "unmute"
+          ? null
+          : currentModeration?.muted_until ?? null,
+    reason,
+  };
+
+  const { error } = await supabaseAdmin
+    .from("chat_user_moderation")
+    .upsert(updates, { onConflict: "room_id,user_id" });
+
+  if (error) {
+    return {
+      success: false,
+      message: `No se pudo guardar la moderacion: ${error.message}`,
+    };
+  }
+
+  revalidatePath("/admin");
+  revalidatePath("/admin/chat");
+
+  return {
+    success: true,
+    message:
+      intent === "mute"
+        ? "Silencio aplicado correctamente."
+        : intent === "unmute"
+          ? "Silencio retirado correctamente."
+          : intent === "block"
+            ? "Acceso bloqueado correctamente."
+            : "Acceso restaurado correctamente.",
+  };
+}
+
 export async function updateDossierAction(
   contentItemId: string,
   _prevState: AdminActionState,
@@ -73,53 +165,13 @@ export async function updateDossierAction(
   const title = valueOrNull(formData.get("title"));
   const description = valueOrNull(formData.get("description"));
   const isActive = formData.get("is_active") === "on";
-  const fileEntry = formData.get("pdf_file");
-  let nextAssetPath: string | undefined;
+  const nextAssetPath = valueOrNull(formData.get("asset_path"));
 
   if (!title) {
     return {
       success: false,
       message: "El titulo del dossier es obligatorio.",
     };
-  }
-
-  if (fileEntry instanceof File && fileEntry.size > 0) {
-    const lowerName = fileEntry.name.toLowerCase();
-    const isPdf =
-      fileEntry.type === "application/pdf" || lowerName.endsWith(".pdf");
-
-    if (!isPdf) {
-      return {
-        success: false,
-        message: "Solo se permiten archivos PDF.",
-      };
-    }
-
-    if (fileEntry.size > 15 * 1024 * 1024) {
-      return {
-        success: false,
-        message: "El PDF supera el limite de 15 MB.",
-      };
-    }
-
-    const safeName = lowerName.replace(/[^a-z0-9.-]/g, "-");
-    const filePath = `admin/${contentItemId}/${Date.now()}-${safeName}`;
-    const arrayBuffer = await fileEntry.arrayBuffer();
-    const uploadResult = await supabaseAdmin.storage
-      .from("dossiers")
-      .upload(filePath, new Uint8Array(arrayBuffer), {
-        contentType: "application/pdf",
-        upsert: true,
-      });
-
-    if (uploadResult.error) {
-      return {
-        success: false,
-        message: `No se pudo subir el PDF: ${uploadResult.error.message}`,
-      };
-    }
-
-    nextAssetPath = filePath;
   }
 
   const updates: {
