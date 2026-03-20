@@ -10,22 +10,71 @@ const supabaseAdmin = createClient(
 );
 
 export async function POST(req: Request) {
-  const { userId } = await req.json();
+  try {
+    const { userId } = await req.json();
 
-  const { data: sub } = await supabaseAdmin
-    .from("subscriptions")
-    .select("stripe_customer_id")
-    .eq("user_id", userId)
-    .maybeSingle();
+    if (!userId) {
+      return NextResponse.json({ error: "Missing userId" }, { status: 400 });
+    }
 
-  if (!sub?.stripe_customer_id) {
-    return NextResponse.json({ error: "No customer" }, { status: 400 });
+    const { data: sub, error: subError } = await supabaseAdmin
+      .from("subscriptions")
+      .select("stripe_customer_id")
+      .eq("user_id", userId)
+      .maybeSingle();
+
+    if (subError) {
+      return NextResponse.json({ error: subError.message }, { status: 500 });
+    }
+
+    let customerId = sub?.stripe_customer_id ?? null;
+
+    if (customerId) {
+      try {
+        await stripe.customers.retrieve(customerId);
+      } catch {
+        customerId = null;
+      }
+    }
+
+    if (!customerId) {
+      const { data: profile, error: profileError } = await supabaseAdmin
+        .from("profiles")
+        .select("email")
+        .eq("id", userId)
+        .single();
+
+      if (profileError || !profile?.email) {
+        return NextResponse.json({ error: "Profile not found" }, { status: 400 });
+      }
+
+      const found = await stripe.customers.list({ email: profile.email, limit: 1 });
+      customerId = found.data[0]?.id ?? null;
+
+      if (customerId) {
+        const { error: updateError } = await supabaseAdmin
+          .from("subscriptions")
+          .update({ stripe_customer_id: customerId })
+          .eq("user_id", userId);
+
+        if (updateError) {
+          return NextResponse.json({ error: updateError.message }, { status: 500 });
+        }
+      }
+    }
+
+    if (!customerId) {
+      return NextResponse.json({ error: "No Stripe customer found for this user" }, { status: 400 });
+    }
+
+    const session = await stripe.billingPortal.sessions.create({
+      customer: customerId,
+      return_url: `${process.env.NEXT_PUBLIC_APP_URL}/app`,
+    });
+
+    return NextResponse.json({ url: session.url });
+  } catch (error) {
+    const message = error instanceof Error ? error.message : "Portal error";
+    return NextResponse.json({ error: message }, { status: 500 });
   }
-
-  const session = await stripe.billingPortal.sessions.create({
-    customer: sub.stripe_customer_id,
-    return_url: `${process.env.NEXT_PUBLIC_APP_URL}/app`,
-  });
-
-  return NextResponse.json({ url: session.url });
 }
