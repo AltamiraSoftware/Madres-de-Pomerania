@@ -9,11 +9,22 @@ const supabaseAdmin = createClient(
   process.env.SUPABASE_SERVICE_ROLE_KEY!
 );
 
+type MembershipTier = "esencial" | "vip";
+
+function resolvePriceIdForTier(tier: MembershipTier) {
+  const priceIdByTier: Record<MembershipTier, string | undefined> = {
+    esencial: process.env.STRIPE_PRICE_ID_ESENCIAL ?? process.env.STRIPE_PRICE_ID,
+    vip: process.env.STRIPE_PRICE_ID_VIP,
+  };
+
+  return priceIdByTier[tier] ?? null;
+}
+
 export async function POST(req: Request) {
   try {
     const { userId, tier = "esencial" } = (await req.json()) as {
       userId: string;
-      tier?: "esencial" | "vip";
+      tier?: MembershipTier;
     };
 
     if (!userId) {
@@ -28,6 +39,15 @@ export async function POST(req: Request) {
 
     if (error || !profile?.email) {
       return NextResponse.json({ error: "Profile not found" }, { status: 400 });
+    }
+
+    const priceId = resolvePriceIdForTier(tier);
+
+    if (!priceId) {
+      return NextResponse.json(
+        { error: `Missing Stripe price configuration for tier: ${tier}` },
+        { status: 500 }
+      );
     }
 
     const { data: existingSub } = await supabaseAdmin
@@ -65,7 +85,7 @@ export async function POST(req: Request) {
     const session = await stripe.checkout.sessions.create({
       mode: "subscription",
       customer: customerId,
-      line_items: [{ price: process.env.STRIPE_PRICE_ID!, quantity: 1 }],
+      line_items: [{ price: priceId, quantity: 1 }],
       success_url: `${process.env.NEXT_PUBLIC_APP_URL}/app?success=1`,
       cancel_url: `${process.env.NEXT_PUBLIC_APP_URL}/app?canceled=1`,
       allow_promotion_codes: true,
