@@ -1,5 +1,6 @@
 "use client"
 
+import { useAuthModal } from "@/components/auth/AuthModalProvider"
 import { useEffect, useRef, useState } from "react"
 import { ArrowRight, Check, Minus } from "lucide-react"
 
@@ -54,6 +55,7 @@ const comparisonRows = [
 export function Pricing() {
   const ref = useRef<HTMLElement>(null)
   const [visible, setVisible] = useState(false)
+  const { openLogin } = useAuthModal()
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -196,6 +198,7 @@ export function Pricing() {
               </ul>
 
               <button
+                onClick={openLogin}
                 className={`btn-luxury w-full px-6 py-3.5 text-[10px] tracking-[0.24em] uppercase transition-all ${
                   plan.highlighted
                     ? "border border-white/10 bg-[#f7f1e8] text-[#4d3b29] hover:bg-white"
