@@ -6,7 +6,7 @@ import { Menu, X, Lock } from "lucide-react"
 
 const navLinks = [
   { label: "Inicio", href: "#inicio" },
-  { label: "Membresia", href: "#niveles" },
+  { label: "Membresía", href: "#niveles" },
   { label: "Planes", href: "#membresia" },
   { label: "Contacto", href: "#contacto" },
 ]
@@ -126,7 +126,7 @@ export function Header() {
         <button
           onClick={() => setOpen((v) => !v)}
           className="relative rounded-full p-2 text-foreground md:hidden transition hover:bg-foreground/5"
-          aria-label={open ? "Cerrar menu" : "Abrir menu"}
+          aria-label={open ? "Cerrar menú" : "Abrir menú"}
         >
           {open ? <X className="h-5 w-5" strokeWidth={1} /> : <Menu className="h-5 w-5" strokeWidth={1} />}
         </button>
@@ -159,7 +159,7 @@ export function Header() {
             <button
               onClick={() => setOpen(false)}
               className="rounded-full p-2 text-foreground transition hover:bg-foreground/5"
-              aria-label="Cerrar menu"
+              aria-label="Cerrar menú"
             >
               <X className="h-5 w-5" strokeWidth={1} />
             </button>

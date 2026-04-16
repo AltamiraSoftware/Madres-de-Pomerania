@@ -34,7 +34,7 @@ export default async function AdminEmailsPage() {
             </h2>
             <p className="mt-3 max-w-3xl text-sm leading-6 text-[#635548] md:text-[15px]">
               Cada mes se presenta como desplegable para reducir ruido visual y
-              revisar el contenido de forma mas ordenada.
+              revisar el contenido de forma más ordenada.
             </p>
           </div>
           <div className="grid grid-cols-2 gap-3 text-sm text-[#4d4034] sm:w-auto">

@@ -15,11 +15,11 @@ export async function GET() {
   const viewer = await getChatViewerContext();
 
   if (!viewer) {
-    return forbidden("Debes iniciar sesion para entrar en la comunidad.", 401);
+    return forbidden("Debes iniciar sesión para entrar en la comunidad.", 401);
   }
 
   if (!viewer.hasActiveSubscription && !viewer.isAdmin) {
-    return forbidden("Necesitas una suscripcion activa para ver la comunidad.");
+    return forbidden("Necesitas una suscripción activa para ver la comunidad.");
   }
 
   if (viewer.moderation.isBlocked) {
@@ -28,7 +28,7 @@ export async function GET() {
 
   if (!viewer.room) {
     return NextResponse.json(
-      { error: "La sala principal de la comunidad no esta disponible." },
+      { error: "La sala principal de la comunidad no está disponible." },
       { status: 404 }
     );
   }
@@ -42,11 +42,11 @@ export async function POST(request: Request) {
   const viewer = await getChatViewerContext();
 
   if (!viewer) {
-    return forbidden("Debes iniciar sesion para escribir en la comunidad.", 401);
+    return forbidden("Debes iniciar sesión para escribir en la comunidad.", 401);
   }
 
   if (!viewer.hasActiveSubscription && !viewer.isAdmin) {
-    return forbidden("Necesitas una suscripcion activa para participar.");
+    return forbidden("Necesitas una suscripción activa para participar.");
   }
 
   if (viewer.moderation.isBlocked) {
@@ -54,12 +54,12 @@ export async function POST(request: Request) {
   }
 
   if (!viewer.isAdmin && isMutedNow(viewer.moderation)) {
-    return forbidden("Tu cuenta esta silenciada temporalmente y no puede enviar mensajes.");
+    return forbidden("Tu cuenta está silenciada temporalmente y no puede enviar mensajes.");
   }
 
   if (!viewer.room) {
     return NextResponse.json(
-      { error: "La sala principal de la comunidad no esta disponible." },
+      { error: "La sala principal de la comunidad no está disponible." },
       { status: 404 }
     );
   }
@@ -89,7 +89,7 @@ export async function POST(request: Request) {
 
   if (body.length > 1500) {
     return NextResponse.json(
-      { error: "El mensaje supera el limite de 1500 caracteres." },
+      { error: "El mensaje supera el límite de 1500 caracteres." },
       { status: 400 }
     );
   }
@@ -117,7 +117,7 @@ export async function DELETE(request: Request) {
   const viewer = await getChatViewerContext();
 
   if (!viewer) {
-    return forbidden("Debes iniciar sesion para gestionar la comunidad.", 401);
+    return forbidden("Debes iniciar sesión para gestionar la comunidad.", 401);
   }
 
   if (!viewer.isAdmin) {
@@ -126,7 +126,7 @@ export async function DELETE(request: Request) {
 
   if (!viewer.room) {
     return NextResponse.json(
-      { error: "La sala principal de la comunidad no esta disponible." },
+      { error: "La sala principal de la comunidad no está disponible." },
       { status: 404 }
     );
   }

@@ -36,7 +36,7 @@ export default async function AdminDossiersPage() {
             </h2>
             <p className="mt-3 max-w-3xl text-sm leading-6 text-[#635548] md:text-[15px]">
               Gestiona cada dossier por mes con una vista plegable y limpia,
-              pensada para trabajar rapido incluso en movil.
+              pensada para trabajar rápido incluso en móvil.
             </p>
           </div>
           <div className="grid grid-cols-2 gap-3 text-sm text-[#4d4034] sm:w-auto">

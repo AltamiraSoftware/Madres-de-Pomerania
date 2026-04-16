@@ -9,24 +9,24 @@ import {
 
 const faqs = [
   {
-    q: "Puedo cambiar de plan en cualquier momento?",
-    a: "Si, puedes subir o bajar de plan cuando quieras. El cambio se aplica en tu siguiente ciclo de facturacion, sin penalizaciones.",
+    q: "¿Puedo cambiar de plan en cualquier momento?",
+    a: "Sí, puedes subir o bajar de plan cuando quieras. El cambio se aplica en tu siguiente ciclo de facturación, sin penalizaciones.",
   },
   {
-    q: "Hay compromiso de permanencia?",
-    a: "No. Puedes cancelar tu membresia cuando quieras. Mantendras el acceso hasta el final del periodo pagado.",
+    q: "¿Hay compromiso de permanencia?",
+    a: "No. Puedes cancelar tu membresía cuando quieras. Mantendrás el acceso hasta el final del periodo pagado.",
   },
   {
-    q: "Como recibo el contenido semanal?",
-    a: "Cada semana recibes un email con tu nuevo contenido desbloqueado, adaptado a tu nivel de membresia. Tambien puedes acceder directamente desde tu area privada.",
+    q: "¿Cómo recibo el contenido semanal?",
+    a: "Cada semana recibes un email con tu nuevo contenido desbloqueado, adaptado a tu nivel de membresía. También puedes acceder directamente desde tu área privada.",
   },
   {
-    q: "Que incluye el dossier mensual del plan A Medida?",
-    a: "Un informe personalizado con recomendaciones de cuidado, nutricion, salud capilar y novedades relevantes adaptadas a tu Pomerania.",
+    q: "¿Qué incluye el dossier mensual del plan A Medida?",
+    a: "Un informe personalizado con recomendaciones de cuidado, nutrición, salud capilar y novedades relevantes adaptadas a tu Pomerania.",
   },
   {
-    q: "Puedo regalar una membresia?",
-    a: "Por supuesto. Contactanos y te ayudamos a preparar un acceso de regalo con una nota personalizada.",
+    q: "¿Puedo regalar una membresía?",
+    a: "Por supuesto. Contáctanos y te ayudamos a preparar un acceso de regalo con una nota personalizada.",
   },
 ]
 

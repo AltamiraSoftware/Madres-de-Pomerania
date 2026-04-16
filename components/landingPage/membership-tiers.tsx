@@ -8,9 +8,9 @@ const tiers = [
     label: "Nivel Uno",
     name: "Esencial",
     features: [
-      "Acceso a Guias de Cuidado Basicas",
+      "Acceso a Guías de Cuidado Básicas",
       "Actualizaciones Mensuales de Salud",
-      "Soporte via Chat Comunitario",
+      "Soporte vía Chat Comunitario",
     ],
   },
   {
@@ -20,7 +20,7 @@ const tiers = [
     features: [
       "Planes de Cuidado Completamente Personalizados",
       "Sesiones Mensuales de Q&A en Vivo",
-      "Soporte Prioritario y Asesoria Directa",
+      "Soporte Prioritario y Asesoría Directa",
     ],
   },
 ]
@@ -48,7 +48,7 @@ export function MembershipTiers() {
           }`}
         >
           <p className="mb-6 text-[10px] tracking-[0.3em] text-muted-foreground uppercase">
-            Membresia
+            Membresía
           </p>
           <h2 className="max-w-md font-serif text-[1.8rem] leading-[1.1] text-foreground sm:text-[2.2rem] lg:text-[2.8rem] text-balance">
             Dos niveles, un mismo compromiso

@@ -4,19 +4,19 @@ import { useEffect, useRef, useState } from "react"
 
 const testimonials = [
   {
-    name: "Maria L.",
+    name: "María L.",
     role: "Miembro A Medida",
-    text: "Desde que me uni, la salud del pelo de Luna ha cambiado completamente. Las guias son claras y el soporte directo es increible.",
+    text: "Desde que me uní, la salud del pelo de Luna ha cambiado completamente. Las guías son claras y el soporte directo es increíble.",
   },
   {
     name: "Carmen R.",
     role: "Miembro Esencial",
-    text: "Por fin un espacio pensado para nosotras. Sin ruido, sin publicidad. Solo informacion util y un trato exquisito.",
+    text: "Por fin un espacio pensado para nosotras. Sin ruido, sin publicidad. Solo información útil y un trato exquisito.",
   },
   {
     name: "Isabel G.",
     role: "Miembro A Medida",
-    text: "El dossier mensual es oro puro. Me ahorra horas de busqueda y me da tranquilidad saber que estoy haciendo lo correcto con Coco.",
+    text: "El dossier mensual es oro puro. Me ahorra horas de búsqueda y me da tranquilidad saber que estoy haciendo lo correcto con Coco.",
   },
 ]
 

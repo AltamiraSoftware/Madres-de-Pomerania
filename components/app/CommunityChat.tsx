@@ -62,11 +62,11 @@ export default function CommunityChat({
   mutedReason,
   canSend,
   title = "Sala privada de la comunidad",
-  subtitle = "Un chat cuidado, cercano y elegante para compartir avances, dudas y pequenas victorias.",
+  subtitle = "Un chat cuidado, cercano y elegante para compartir avances, dudas y pequeñas victorias.",
   closeHref,
   closeLabel = "Cerrar",
   launcherTitle = "Chat privado",
-  launcherDescription = "Abre la conversacion en un modal centrado, limpio y pensado para leer y responder sin distracciones.",
+  launcherDescription = "Abre la conversación en un modal centrado, limpio y pensado para leer y responder sin distracciones.",
   canDeleteMessages = false,
 }: CommunityChatProps) {
   const supabase = useMemo(() => createClient(), []);
@@ -225,7 +225,7 @@ export default function CommunityChat({
     }
 
     const confirmed = window.confirm(
-      "Este mensaje se borrara del chat y de la base de datos. Quieres continuar?"
+      "Este mensaje se borrará del chat y de la base de datos. ¿Quieres continuar?"
     );
 
     if (!confirmed) {
@@ -323,7 +323,7 @@ export default function CommunityChat({
                 Escritura restringida
               </p>
               <p className="mt-2 leading-6">
-                Puedes seguir leyendo la comunidad, pero tu cuenta esta silenciada {formatMutedUntil(mutedUntil)}.
+                Puedes seguir leyendo la comunidad, pero tu cuenta está silenciada {formatMutedUntil(mutedUntil)}.
                 {mutedReason ? ` Motivo: ${mutedReason}` : ""}
               </p>
             </div>
@@ -340,13 +340,13 @@ export default function CommunityChat({
                     C
                   </div>
                   <p className="mt-5 text-[11px] uppercase tracking-[0.24em] text-[#90795f]">
-                    Conversacion abierta
+                    Conversación abierta
                   </p>
                   <h3 className="mt-3 font-serif text-2xl text-[#241a12]">
-                    Todavia no hay mensajes.
+                    Todavía no hay mensajes.
                   </h3>
                   <p className="mt-3 text-sm leading-6 text-[#625549]">
-                    Abre la sala con un mensaje amable, breve y util para el resto de la comunidad.
+                    Abre la sala con un mensaje amable, breve y útil para el resto de la comunidad.
                   </p>
                 </div>
               ) : (
@@ -446,7 +446,7 @@ export default function CommunityChat({
                     onChange={(event) => setBody(event.target.value)}
                     placeholder={
                       canSend
-                        ? "Escribe aqui tu mensaje..."
+                        ? "Escribe aquí tu mensaje..."
                         : "Ahora mismo no puedes enviar mensajes."
                     }
                     disabled={!canSend || isSending}
@@ -457,7 +457,7 @@ export default function CommunityChat({
 
                 <div className="flex items-center justify-between gap-3 md:w-[210px] md:flex-col md:items-stretch">
                   <p className="hidden text-xs leading-5 text-[#7b6a58] md:block">
-                    Maximo 1500 caracteres.
+                    Máximo 1500 caracteres.
                   </p>
                   <button
                     type="submit"

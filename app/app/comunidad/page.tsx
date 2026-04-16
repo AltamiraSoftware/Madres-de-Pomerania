@@ -35,7 +35,7 @@ export default async function CommunityPage() {
   const latestDossier = dossiers[dossiers.length - 1] ?? null;
   const latestDossierLabel = latestDossier?.monthIndex
     ? `Mes ${latestDossier.monthIndex}`
-    : "Tu biblioteca empezara a llenarse pronto";
+    : "Tu biblioteca empezará a llenarse pronto";
 
   const canRead = viewer.hasActiveSubscription && !viewer.moderation.isBlocked;
   const canSend = canRead && !isMutedNow(viewer.moderation);
@@ -57,7 +57,7 @@ export default async function CommunityPage() {
                 Activa tu acceso para entrar al chat
               </h2>
               <p className="mt-3 max-w-2xl text-sm leading-6 text-[#625549]">
-                La conversacion comunitaria esta reservada para miembros con suscripcion activa. En cuanto reanudes tu plan, podras leer y participar otra vez.
+                La conversación comunitaria está reservada para miembros con suscripción activa. En cuanto reanudes tu plan, podrás leer y participar otra vez.
               </p>
             </div>
 
@@ -69,14 +69,14 @@ export default async function CommunityPage() {
                 Sin acceso
               </p>
               <p className="mt-2 text-sm text-[#625549]">
-                Los mensajes de la comunidad permanecen ocultos hasta que tu suscripcion vuelva a estar activa.
+                Los mensajes de la comunidad permanecen ocultos hasta que tu suscripción vuelva a estar activa.
               </p>
             </div>
           </div>
 
           <div className="flex flex-col gap-4 px-5 py-5 md:px-6 lg:flex-row lg:items-center lg:justify-between">
             <div className="text-sm leading-6 text-[#625549]">
-              Tu dashboard y tus dossiers siguen aqui, pero la comunidad requiere acceso activo.
+              Tu dashboard y tus dossiers siguen aquí, pero la comunidad requiere acceso activo.
             </div>
             <div className="lg:min-w-[240px]">
               <SubscribeButton userId={viewer.userId} tier="esencial" />
@@ -112,7 +112,7 @@ export default async function CommunityPage() {
         </section>
       ) : !viewer.room ? (
         <section className="rounded-[30px] border border-[#ddd1c0] bg-white/92 px-5 py-8 text-sm text-[#625549] shadow-[0_16px_48px_rgba(84,64,40,0.06)] md:px-6">
-          La sala principal de la comunidad todavia no esta disponible.
+          La sala principal de la comunidad todavía no está disponible.
         </section>
       ) : (
         <div className="space-y-6">
@@ -123,7 +123,7 @@ export default async function CommunityPage() {
               </p>
               <p className="mt-3 font-serif text-3xl text-[#241a12]">Activo</p>
               <p className="mt-2 text-sm text-[#625549]">
-                Tu suscripcion te permite leer y participar en la comunidad.
+                Tu suscripción te permite leer y participar en la comunidad.
               </p>
             </article>
 
@@ -147,7 +147,7 @@ export default async function CommunityPage() {
               <p className="mt-2 text-sm text-[#625549]">
                 {canSend
                   ? "Puedes escribir y participar con normalidad."
-                  : `Podras volver a escribir: ${formatMutedUntil(viewer.moderation.mutedUntil)}`}
+                  : `Podrás volver a escribir: ${formatMutedUntil(viewer.moderation.mutedUntil)}`}
               </p>
             </article>
           </section>
@@ -161,7 +161,7 @@ export default async function CommunityPage() {
             mutedReason={viewer.moderation.reason}
             canSend={canSend}
             title="Sala privada de madres Pomerania"
-            subtitle="Una conversacion centrada, elegante y cercana para compartir avances, dudas y pequenos descubrimientos del programa."
+            subtitle="Una conversación centrada, elegante y cercana para compartir avances, dudas y pequeños descubrimientos del programa."
             closeHref="/app"
             closeLabel="Volver al panel"
           />

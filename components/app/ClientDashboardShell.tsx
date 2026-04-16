@@ -30,7 +30,7 @@ const navItems = [
   {
     href: "#",
     label: "VIP",
-    description: "Proximamente",
+    description: "Próximamente",
     disabled: true,
   },
 ];
@@ -49,7 +49,7 @@ export default function ClientDashboardShell({
           <div className="overflow-hidden rounded-[32px] border border-[#d7ccb9] bg-[linear-gradient(160deg,rgba(255,255,255,0.96),rgba(244,232,214,0.88))] shadow-[0_18px_60px_rgba(79,58,33,0.08)] backdrop-blur-sm">
             <div className="border-b border-[#d7ccb9] px-5 py-6">
               <p className="text-[11px] uppercase tracking-[0.32em] text-[#8b7760]">
-                Area privada
+                Área privada
               </p>
               <h2 className="mt-3 font-serif text-3xl text-[#251b12]">
                 Ana y Boo
@@ -75,7 +75,7 @@ export default function ClientDashboardShell({
 
               <div className="rounded-[22px] border border-[#e3d7c7] bg-white/85 px-4 py-4">
                 <p className="text-[11px] uppercase tracking-[0.2em] text-[#8f7962]">
-                  Ultimo avance
+                  Último avance
                 </p>
                 <p className="mt-2 text-sm font-medium text-[#241a12]">
                   {latestDossierLabel}
@@ -151,13 +151,13 @@ export default function ClientDashboardShell({
                   Tu espacio privado
                 </h1>
                 <p className="mt-3 max-w-2xl text-sm leading-6 text-[#635548] md:text-[15px]">
-                  Un entorno mas claro para seguir tu avance, revisar el estado
-                  de tu suscripcion y consultar tus dossiers desbloqueados.
+                  Un entorno más claro para seguir tu avance, revisar el estado
+                  de tu suscripción y consultar tus dossiers desbloqueados.
                 </p>
               </div>
 
               <div className="rounded-[24px] border border-[#e2d4c3] bg-white/80 px-4 py-3 text-sm text-[#5f5347] shadow-[0_10px_24px_rgba(95,83,71,0.06)]">
-                Biblioteca desbloqueada - {dossierCount} items
+                Biblioteca desbloqueada - {dossierCount} ítems
               </div>
             </div>
           </div>

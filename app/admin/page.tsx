@@ -46,14 +46,14 @@ export default async function AdminPage() {
         <div className="grid gap-6 xl:grid-cols-[minmax(0,1.4fr)_minmax(300px,0.8fr)] xl:items-end">
           <div>
             <p className="text-[11px] uppercase tracking-[0.34em] text-[#e7d7c1]">
-              Vision general
+              Visión general
             </p>
             <h2 className="mt-4 max-w-2xl font-serif text-4xl leading-tight md:text-5xl">
-              Un panel mas claro para operar contenido y membresias.
+              Un panel más claro para operar contenido y membresías.
             </h2>
             <p className="mt-4 max-w-2xl text-sm leading-7 text-[#efe0cb] md:text-[15px]">
-              Todo el trabajo editorial y operativo reunido en una interfaz mas
-              limpia, premium y facil de revisar de un vistazo.
+              Todo el trabajo editorial y operativo reunido en una interfaz más
+              limpia, premium y fácil de revisar de un vistazo.
             </p>
           </div>
 
@@ -77,14 +77,14 @@ export default async function AdminPage() {
       <section className="grid gap-4 lg:grid-cols-3">
         <article className="rounded-[28px] border border-[#ddd1c0] bg-white/90 p-6 shadow-[0_14px_38px_rgba(90,70,45,0.05)]">
           <p className="text-[11px] uppercase tracking-[0.24em] text-[#8f7962]">
-            Gestion editorial
+            Gestión editorial
           </p>
           <h3 className="mt-3 font-serif text-3xl text-[#251b12]">
             Emails por mes
           </h3>
           <p className="mt-3 text-sm leading-6 text-[#625448]">
-            La nueva vista agrupa cada mes como desplegable para localizar rapido
-            la secuencia correcta y reducir saturacion visual.
+            La nueva vista agrupa cada mes como desplegable para localizar rápido
+            la secuencia correcta y reducir saturación visual.
           </p>
           <Link
             href="/admin/emails"
@@ -103,7 +103,7 @@ export default async function AdminPage() {
           </h3>
           <p className="mt-3 text-sm leading-6 text-[#625448]">
             Gestiona metadatos y reemplazos de PDF con una estructura plegable,
-            responsive y mas limpia para el trabajo diario.
+            responsive y más limpia para el trabajo diario.
           </p>
           <Link
             href="/admin/dossiers"
@@ -118,7 +118,7 @@ export default async function AdminPage() {
             Comunidad
           </p>
           <h3 className="mt-3 font-serif text-3xl text-[#251b12]">
-            Moderacion del chat
+            Moderación del chat
           </h3>
           <p className="mt-3 text-sm leading-6 text-[#625448]">
             Revisa participantes activos, aplica silencios temporales y bloqueos sin tocar el resto del sistema.
@@ -144,7 +144,7 @@ export default async function AdminPage() {
               </h3>
             </div>
             <p className="text-sm text-[#67594d]">
-              Nombre, email, tier y proxima referencia de renovacion.
+              Nombre, email, tier y próxima referencia de renovación.
             </p>
           </div>
         </div>
@@ -162,7 +162,7 @@ export default async function AdminPage() {
                   <th className="px-5 py-4 font-medium md:px-6">Email</th>
                   <th className="px-5 py-4 font-medium md:px-6">Tier</th>
                   <th className="px-5 py-4 font-medium md:px-6">Estado</th>
-                  <th className="px-5 py-4 font-medium md:px-6">Renovacion</th>
+                  <th className="px-5 py-4 font-medium md:px-6">Renovación</th>
                 </tr>
               </thead>
               <tbody>

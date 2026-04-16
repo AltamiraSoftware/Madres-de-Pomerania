@@ -39,7 +39,7 @@ export function BenefitsSummary() {
               <div className="mt-8 h-px w-8 bg-border" />
               <p className="mt-8 max-w-sm text-[13px] leading-[1.75] text-muted-foreground">
                 Acceso exclusivo sin distracciones para ti y tu Pomerania.
-                Contenido curado, asesorias directas y tranquilidad real.
+                Contenido curado, asesorías directas y tranquilidad real.
               </p>
             </div>
 

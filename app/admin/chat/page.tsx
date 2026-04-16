@@ -23,7 +23,7 @@ export default async function AdminChatPage() {
   if (!room) {
     return (
       <div className="rounded-[30px] border border-[#dfd0bf] bg-white/92 px-6 py-8 text-sm text-[#67594d] shadow-[0_18px_48px_rgba(87,66,43,0.06)]">
-        La sala principal del chat no esta disponible todavia.
+        La sala principal del chat no está disponible todavía.
       </div>
     );
   }
@@ -40,7 +40,7 @@ export default async function AdminChatPage() {
         <div className="grid gap-6 xl:grid-cols-[minmax(0,1.4fr)_minmax(300px,0.8fr)] xl:items-end">
           <div>
             <p className="text-[11px] uppercase tracking-[0.34em] text-[#e7d7c1]">
-              Moderacion de comunidad
+              Moderación de comunidad
             </p>
             <h2 className="mt-4 max-w-2xl font-serif text-4xl leading-tight md:text-5xl">
               Controla tono, acceso y ritmo del chat comunitario.
@@ -62,7 +62,7 @@ export default async function AdminChatPage() {
             <div className="rounded-[24px] border border-white/15 bg-white/10 px-4 py-4 backdrop-blur-sm">
               <p className="text-[11px] uppercase tracking-[0.22em] text-[#eddcc7]">Silenciadas</p>
               <p className="mt-3 font-serif text-3xl">{mutedCount}</p>
-              <p className="mt-2 text-sm text-[#e8d8c4]">Lectura permitida, envio restringido</p>
+              <p className="mt-2 text-sm text-[#e8d8c4]">Lectura permitida, envío restringido</p>
             </div>
             <div className="rounded-[24px] border border-white/15 bg-white/10 px-4 py-4 backdrop-blur-sm">
               <p className="text-[11px] uppercase tracking-[0.22em] text-[#eddcc7]">Bloqueadas</p>
@@ -83,7 +83,7 @@ export default async function AdminChatPage() {
         </article>
 
         <article className="rounded-[28px] border border-[#ddd1c0] bg-white/90 p-6 shadow-[0_14px_38px_rgba(90,70,45,0.05)]">
-          <p className="text-[11px] uppercase tracking-[0.24em] text-[#8f7962]">Politica suave</p>
+          <p className="text-[11px] uppercase tracking-[0.24em] text-[#8f7962]">Política suave</p>
           <h3 className="mt-3 font-serif text-3xl text-[#251b12]">Silencio</h3>
           <p className="mt-3 text-sm leading-6 text-[#625448]">
             La usuaria puede seguir leyendo, pero no publicar mientras el silencio siga activo.
@@ -91,10 +91,10 @@ export default async function AdminChatPage() {
         </article>
 
         <article className="rounded-[28px] border border-[#ddd1c0] bg-white/90 p-6 shadow-[0_14px_38px_rgba(90,70,45,0.05)]">
-          <p className="text-[11px] uppercase tracking-[0.24em] text-[#8f7962]">Politica fuerte</p>
+          <p className="text-[11px] uppercase tracking-[0.24em] text-[#8f7962]">Política fuerte</p>
           <h3 className="mt-3 font-serif text-3xl text-[#251b12]">Bloqueo</h3>
           <p className="mt-3 text-sm leading-6 text-[#625448]">
-            La usuaria deja de ver el chat hasta que se retire la restriccion.
+            La usuaria deja de ver el chat hasta que se retire la restricción.
           </p>
         </article>
       </section>
@@ -103,7 +103,7 @@ export default async function AdminChatPage() {
         <div className="border-b border-[#eee2d5] px-5 py-5 md:px-6">
           <div className="flex flex-col gap-2 md:flex-row md:items-end md:justify-between">
             <div>
-              <p className="text-[11px] uppercase tracking-[0.24em] text-[#8f7962]">Moderacion</p>
+              <p className="text-[11px] uppercase tracking-[0.24em] text-[#8f7962]">Moderación</p>
               <h3 className="mt-2 font-serif text-3xl text-[#241a12]">Miembros con acceso al chat</h3>
             </div>
             <p className="text-sm text-[#67594d]">
@@ -123,7 +123,7 @@ export default async function AdminChatPage() {
               <h3 className="mt-2 font-serif text-3xl text-[#241a12]">Vista y respuesta como Mama de Boo</h3>
             </div>
             <p className="text-sm text-[#67594d]">
-              Los mensajes enviados desde aqui se muestran al resto de miembros como Mama de Boo.
+              Los mensajes enviados desde aquí se muestran al resto de miembros como Mamá de Boo.
             </p>
           </div>
         </div>
@@ -132,13 +132,13 @@ export default async function AdminChatPage() {
           <CommunityChat
             roomId={room.id}
             currentUserId={viewer.userId}
-            currentDisplayName="Mama de Boo"
+            currentDisplayName="Mamá de Boo"
             initialMessages={messages}
             mutedUntil={null}
             mutedReason={null}
             canSend
             title="Sala principal de comunidad"
-            subtitle="Vista operativa del chat en formato modal premium, con respuesta directa del equipo bajo la firma Mama de Boo."
+            subtitle="Vista operativa del chat en formato modal premium, con respuesta directa del equipo bajo la firma Mamá de Boo."
             closeHref="/admin"
             closeLabel="Volver al admin"
             canDeleteMessages

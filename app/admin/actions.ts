@@ -79,14 +79,14 @@ export async function updateChatModerationAction(
   if (!["mute", "unmute", "block", "unblock"].includes(intent)) {
     return {
       success: false,
-      message: "No se pudo interpretar la accion de moderacion.",
+      message: "No se pudo interpretar la acción de moderación.",
     };
   }
 
   if ((intent === "mute" || intent === "block") && !reason) {
     return {
       success: false,
-      message: "Anade un motivo para registrar la moderacion.",
+      message: "Añade un motivo para registrar la moderación.",
     };
   }
 
@@ -100,7 +100,7 @@ export async function updateChatModerationAction(
   if (currentModerationError) {
     return {
       success: false,
-      message: `No se pudo cargar la moderacion actual: ${currentModerationError.message}`,
+      message: `No se pudo cargar la moderación actual: ${currentModerationError.message}`,
     };
   }
 
@@ -135,7 +135,7 @@ export async function updateChatModerationAction(
   if (error) {
     return {
       success: false,
-      message: `No se pudo guardar la moderacion: ${error.message}`,
+      message: `No se pudo guardar la moderación: ${error.message}`,
     };
   }
 
@@ -170,7 +170,7 @@ export async function updateDossierAction(
   if (!title) {
     return {
       success: false,
-      message: "El titulo del dossier es obligatorio.",
+      message: "El título del dossier es obligatorio.",
     };
   }
 

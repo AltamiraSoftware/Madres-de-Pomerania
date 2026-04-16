@@ -23,7 +23,7 @@ const navItems = [
   {
     href: "/admin/chat",
     label: "Chat",
-    description: "Moderacion de comunidad",
+    description: "Moderación de comunidad",
   },
 ];
 
@@ -38,7 +38,7 @@ export default function AdminSidebar() {
         </p>
         <h2 className="mt-3 font-serif text-3xl text-[#251b12]">Ana y Boo</h2>
         <p className="mt-3 text-sm leading-6 text-[#5f5347]">
-          Gestion editorial, dossiers y estado del plan esencial.
+          Gestión editorial, dossiers y estado del plan esencial.
         </p>
       </div>
 

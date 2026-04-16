@@ -31,11 +31,11 @@ export function Hero() {
             }`}
           >
             <p className="mb-10 text-[10px] tracking-[0.3em] text-muted-foreground uppercase">
-              Membresia exclusiva
+              Membresía exclusiva
             </p>
 
             <h1 className="font-serif text-[2.2rem] leading-[1.08] tracking-[-0.01em] text-foreground sm:text-[2.8rem] lg:text-[3.4rem] text-balance">
-              Niveles de Membresia
+              Niveles de Membresía
             </h1>
             <p className="mt-3 font-serif text-[1.2rem] leading-[1.2] text-muted-foreground sm:text-[1.5rem] lg:text-[1.8rem]">
               para Madres de Pomerania
@@ -45,7 +45,7 @@ export function Hero() {
 
             <p className="mt-12 max-w-[340px] text-[14px] leading-[1.75] text-muted-foreground">
               Acceso privado para madres de Pomerania de Ana y Boo.
-              Cuidado personalizado, asesoria directa y una comunidad
+              Cuidado personalizado, asesoría directa y una comunidad
               que entiende lo que tu peludo necesita.
             </p>
 

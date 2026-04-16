@@ -11,13 +11,13 @@ const plans = [
     label: "Entrada cuidada",
     price: "29",
     period: "/mes",
-    description: "Todo lo esencial para cuidar a tu Pomerania con mas criterio y calma.",
+    description: "Todo lo esencial para cuidar a tu Pomerania con más criterio y calma.",
     features: [
-      "Guias de cuidado basicas",
+      "Guías de cuidado básicas",
       "Actualizaciones mensuales de salud",
       "Chat comunitario",
       "Contenido semanal por drip",
-      "Acceso al archivo de guias",
+      "Acceso al archivo de guías",
     ],
     cta: "Suscribirme Esencial",
     highlighted: false,
@@ -29,7 +29,7 @@ const plans = [
     label: "Experiencia premium",
     price: "89",
     period: "/mes",
-    description: "La experiencia completa, con acompanamiento mas directo y recomendaciones personalizadas.",
+    description: "La experiencia completa, con acompañamiento más directo y recomendaciones personalizadas.",
     features: [
       "Todo lo del plan Esencial",
       "Planes de cuidado personalizados",
@@ -44,7 +44,7 @@ const plans = [
 ]
 
 const comparisonRows = [
-  "Guias de cuidado",
+  "Guías de cuidado",
   "Actualizaciones de salud",
   "Chat comunitario",
   "Planes personalizados",
@@ -92,8 +92,8 @@ export function Pricing() {
             Elige tu nivel de cuidado
           </h2>
           <p className="mx-auto mt-6 max-w-2xl text-[14px] leading-[1.85] text-muted-foreground">
-            Dos niveles claros, una lectura mas limpia y una presentacion mas sobria.
-            Elige entre una base solida o un acompanamiento mas cercano y personalizado.
+            Dos niveles claros, una lectura más limpia y una presentación más sobria.
+            Elige entre una base sólida o un acompañamiento más cercano y personalizado.
           </p>
           <div className="mx-auto mt-8 h-px w-10 bg-border" />
         </div>
@@ -139,7 +139,7 @@ export function Pricing() {
 
                 {plan.highlighted && (
                   <span className="rounded-full border border-[#c9b392]/25 bg-white/8 px-3 py-1 text-[9px] tracking-[0.24em] text-[#efe2cf] uppercase">
-                    Mas elegido
+                    Más elegido
                   </span>
                 )}
               </div>
@@ -230,7 +230,7 @@ export function Pricing() {
               </h3>
             </div>
             <p className="max-w-sm text-[12px] leading-[1.75] text-muted-foreground">
-              La diferencia esta en el nivel de personalizacion y acceso directo.
+              La diferencia está en el nivel de personalización y acceso directo.
             </p>
           </div>
 
@@ -239,7 +239,7 @@ export function Pricing() {
               <thead>
                 <tr className="border-b border-border/70">
                   <th className="pb-4 text-left text-[10px] tracking-[0.22em] text-muted-foreground uppercase">
-                    Caracteristica
+                    Característica
                   </th>
                   <th className="pb-4 text-center text-[10px] tracking-[0.22em] text-muted-foreground uppercase">
                     Esencial

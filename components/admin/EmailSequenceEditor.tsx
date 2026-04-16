@@ -61,7 +61,7 @@ export default function EmailSequenceEditor({
         <div className="space-y-3">
           <div className="flex flex-wrap gap-2">
             <Badge>{sequence.tier_required}</Badge>
-            <Badge>dia {sequence.day_offset}</Badge>
+            <Badge>día {sequence.day_offset}</Badge>
             <Badge>{sequence.template_key}</Badge>
           </div>
           <div>
@@ -69,7 +69,7 @@ export default function EmailSequenceEditor({
               Asunto
             </p>
             <p className="mt-2 text-sm leading-6 text-[#5e5145]">
-              Ajusta el contenido editorial que leeran las usuarias en este hito.
+              Ajusta el contenido editorial que leerán las usuarias en este hito.
             </p>
           </div>
         </div>

@@ -4,7 +4,7 @@ import { useState } from "react"
 
 const footerCols = [
   {
-    title: "Membresia",
+    title: "Membresía",
     links: [
       { label: "Plan Esencial", href: "#membresia" },
       { label: "Plan A Medida", href: "#membresia" },
@@ -15,15 +15,15 @@ const footerCols = [
     title: "Contenido",
     links: [
       { label: "Blog", href: "#blog" },
-      { label: "Guias", href: "#" },
-      { label: "Metodo", href: "#metodo" },
+      { label: "Guías", href: "#" },
+      { label: "Método", href: "#metodo" },
     ],
   },
   {
     title: "Legal",
     links: [
       { label: "Privacidad", href: "#" },
-      { label: "Terminos", href: "#" },
+      { label: "Términos", href: "#" },
       { label: "Cookies", href: "#" },
     ],
   },

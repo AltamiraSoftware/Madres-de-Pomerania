@@ -21,14 +21,14 @@ export default async function AdminLayout({
             <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
               <div>
                 <p className="text-[11px] uppercase tracking-[0.34em] text-[#90795f]">
-                  Administracion
+                  Administración
                 </p>
                 <h1 className="mt-3 font-serif text-3xl text-[#241a12] md:text-4xl">
                   Centro de control
                 </h1>
                 <p className="mt-3 max-w-2xl text-sm leading-6 text-[#635548] md:text-[15px]">
-                  Una vista mas clara para gestionar contenido, revisar el estado
-                  del programa y mantener la operacion editorial bajo control.
+                  Una vista más clara para gestionar contenido, revisar el estado
+                  del programa y mantener la operación editorial bajo control.
                 </p>
               </div>
 

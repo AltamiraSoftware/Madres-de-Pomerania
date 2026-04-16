@@ -12,7 +12,7 @@ export default function CheckoutStatusBanner({ tier }: { tier?: string | null })
   if (success) {
     return (
       <div className="mb-6 rounded-lg border border-green-200 bg-green-50 p-4">
-        <p className="font-medium">✅ Suscripción confirmada</p>
+        <p className="font-medium">Suscripción confirmada</p>
         <p className="text-sm opacity-80">
           Te has suscrito al plan <span className="font-medium">{tier ?? "esencial"}</span>. Ya tienes acceso al contenido.
         </p>

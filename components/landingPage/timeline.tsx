@@ -5,34 +5,34 @@ import { ArrowRight, CheckCircle2 } from "lucide-react"
 
 const steps = [
   {
-    day: "Dia 1",
+    day: "Día 1",
     title: "Bienvenida personalizada",
     description:
-      "Recibes acceso inmediato a tu area privada, guia de inicio y una hoja de ruta clara para empezar con criterio.",
+      "Recibes acceso inmediato a tu área privada, guía de inicio y una hoja de ruta clara para empezar con criterio.",
   },
   {
-    day: "Dia 8",
+    day: "Día 8",
     title: "Primer contenido desbloqueado",
     description:
-      "Accedes a tu primer bloque semanal con recomendaciones practicas adaptadas al nivel de tu membresia.",
+      "Accedes a tu primer bloque semanal con recomendaciones prácticas adaptadas al nivel de tu membresía.",
   },
   {
-    day: "Dia 15",
+    day: "Día 15",
     title: "Seguimiento y ajuste",
     description:
-      "El recorrido mantiene continuidad: nuevas pautas, prioridades afinadas y una experiencia mas util que acumulativa.",
+      "El recorrido mantiene continuidad: nuevas pautas, prioridades afinadas y una experiencia más útil que acumulativa.",
   },
   {
-    day: "Dia 22",
-    title: "Acompanamiento premium",
+    day: "Día 22",
+    title: "Acompañamiento premium",
     description:
-      "Las miembros A Medida suman sesiones en vivo, soporte prioritario y recomendaciones con un enfoque mas directo.",
+      "Las miembros A Medida suman sesiones en vivo, soporte prioritario y recomendaciones con un enfoque más directo.",
   },
 ]
 
 const highlights = [
-  "Acceso privado y ordenado desde el primer dia",
-  "Contenido semanal con progresion real",
+  "Acceso privado y ordenado desde el primer día",
+  "Contenido semanal con progresión real",
   "Experiencia pensada para avanzar sin saturarte",
 ]
 
@@ -73,11 +73,11 @@ export function Timeline() {
               Experiencia
             </p>
             <h2 className="max-w-lg font-serif text-[1.95rem] leading-[1.05] text-foreground sm:text-[2.45rem] lg:text-[3rem] text-balance">
-              Como funciona tu membresia
+              Cómo funciona tu membresía
             </h2>
             <p className="mt-6 max-w-md text-[14px] leading-[1.85] text-muted-foreground">
-              Hemos convertido el acompanamiento en una experiencia mas elegante, clara y
-              progresiva. Cada etapa entrega valor concreto, sin ruido y con una sensacion
+              Hemos convertido el acompañamiento en una experiencia más elegante, clara y
+              progresiva. Cada etapa entrega valor concreto, sin ruido y con una sensación
               de cuidado continuo.
             </p>
 
@@ -100,7 +100,7 @@ export function Timeline() {
                   Ritmo premium
                 </p>
                 <p className="mt-3 text-[13px] leading-[1.75] text-muted-foreground">
-                  Una membresia que no se siente masiva: entra, avanza, consulta y recibe
+                  Una membresía que no se siente masiva: entra, avanza, consulta y recibe
                   contenido con una cadencia pensada para sostener resultados.
                 </p>
               </div>
@@ -158,11 +158,11 @@ export function Timeline() {
                 Cierre mensual
               </p>
               <h3 className="mt-3 font-serif text-[1.35rem] leading-[1.15] text-balance">
-                Tu experiencia culmina con una vista mas clara de avances y siguientes pasos.
+                Tu experiencia culmina con una vista más clara de avances y siguientes pasos.
               </h3>
               <p className="mt-3 max-w-2xl text-[13px] leading-[1.8] text-[#efe4d6]">
-                Cada mes recibes una sensacion de continuidad real: mas contexto, mejores
-                decisiones y una membresia que acompana con mas criterio que volumen.
+                Cada mes recibes una sensación de continuidad real: más contexto, mejores
+                decisiones y una membresía que acompaña con más criterio que volumen.
               </p>
             </div>
           </div>

@@ -49,7 +49,7 @@ export default async function DashboardPage() {
   const latestDossier = dossiers[dossiers.length - 1] ?? null;
   const latestDossierLabel = latestDossier?.monthIndex
     ? `Mes ${latestDossier.monthIndex}`
-    : "Tu biblioteca empezara a llenarse pronto";
+    : "Tu biblioteca empezará a llenarse pronto";
 
   return (
     <ClientDashboardShell
@@ -69,7 +69,7 @@ export default async function DashboardPage() {
                   Progreso actual
                 </p>
                 <h2 className="mt-2 font-serif text-3xl text-[#241a12]">
-                  Suscripcion activa
+                  Suscripción activa
                 </h2>
                 <p className="mt-3 max-w-2xl text-sm leading-6 text-[#625549]">
                   Mantienes acceso al plan <span className="font-medium text-[#241a12]">{tier}</span> y
@@ -79,8 +79,8 @@ export default async function DashboardPage() {
 
                 {scheduledCancel && cancelDate && (
                   <p className="mt-3 max-w-2xl text-sm leading-6 text-[#625549]">
-                    Tu suscripcion se cancelara el <span className="font-medium text-[#241a12]">{formatLongDate(cancelDate)}</span>.
-                    Mantendras acceso hasta esa fecha.
+                    Tu suscripción se cancelará el <span className="font-medium text-[#241a12]">{formatLongDate(cancelDate)}</span>.
+                    Mantendrás acceso hasta esa fecha.
                   </p>
                 )}
               </div>
@@ -96,7 +96,7 @@ export default async function DashboardPage() {
                 </div>
                 <div className="rounded-[22px] border border-[#e6d8c7] bg-[linear-gradient(180deg,#fffdf9,#f6ede1)] px-4 py-4">
                   <p className="text-[11px] uppercase tracking-[0.2em] text-[#8f7962]">
-                    Ultimo dossier
+                    Último dossier
                   </p>
                   <p className="mt-2 text-sm font-medium text-[#241a12]">
                     {latestDossierLabel}
@@ -130,7 +130,7 @@ export default async function DashboardPage() {
 
                 {cancelDate && (
                   <p className="mt-3 text-sm leading-6 text-[#625549]">
-                    Tu acceso finalizo el <span className="font-medium text-[#241a12]">{formatLongDate(cancelDate)}</span>.
+                    Tu acceso finalizó el <span className="font-medium text-[#241a12]">{formatLongDate(cancelDate)}</span>.
                   </p>
                 )}
               </div>
@@ -175,13 +175,13 @@ export default async function DashboardPage() {
           <article className="rounded-[26px] border border-[#ddd1c0] bg-white/92 p-5 shadow-[0_14px_38px_rgba(90,70,45,0.05)]">
             <p className="text-[11px] uppercase tracking-[0.2em] text-[#8f7962]">Biblioteca</p>
             <h3 className="mt-3 font-serif text-3xl text-[#241a12]">{dossiers.length}</h3>
-            <p className="mt-3 text-sm leading-6 text-[#625549]">Dossiers disponibles en tu espacio privado y ordenados segun tu avance.</p>
+            <p className="mt-3 text-sm leading-6 text-[#625549]">Dossiers disponibles en tu espacio privado y ordenados según tu avance.</p>
           </article>
 
           <article className="rounded-[26px] border border-[#ddd1c0] bg-white/92 p-5 shadow-[0_14px_38px_rgba(90,70,45,0.05)]">
-            <p className="text-[11px] uppercase tracking-[0.2em] text-[#8f7962]">Proximo paso</p>
+            <p className="text-[11px] uppercase tracking-[0.2em] text-[#8f7962]">Próximo paso</p>
             <h3 className="mt-3 font-serif text-3xl text-[#241a12]">{latestDossierLabel}</h3>
-            <p className="mt-3 text-sm leading-6 text-[#625549]">Tu panel ya esta preparado para futuras secciones como comunidad, VIP y soporte.</p>
+            <p className="mt-3 text-sm leading-6 text-[#625549]">Tu panel ya está preparado para futuras secciones como comunidad, VIP y soporte.</p>
           </article>
         </section>
 
@@ -212,13 +212,13 @@ export default async function DashboardPage() {
                   D
                 </div>
                 <p className="mt-5 text-[11px] uppercase tracking-[0.24em] text-[#90795f]">
-                  Aun no disponible
+                  Aún no disponible
                 </p>
                 <h3 className="mt-3 font-serif text-2xl text-[#241a12]">
-                  Tu biblioteca se ira completando mes a mes
+                  Tu biblioteca se irá completando mes a mes
                 </h3>
                 <p className="mx-auto mt-3 max-w-xl text-sm leading-6 text-[#67584b]">
-                  Cuando el sistema desbloquee nuevos contenidos segun tu ciclo del programa, los veras aqui en una vista clara y ordenada.
+                  Cuando el sistema desbloquee nuevos contenidos según tu ciclo del programa, los verás aquí en una vista clara y ordenada.
                 </p>
               </div>
             </div>
@@ -247,7 +247,7 @@ export default async function DashboardPage() {
                   </div>
 
                   <p className="mt-4 flex-1 text-sm leading-6 text-[#635549]">
-                    {dossier.description ?? "Este dossier ya esta disponible para ti."}
+                    {dossier.description ?? "Este dossier ya está disponible para ti."}
                   </p>
 
                   <div className="mt-5 flex flex-col gap-3 border-t border-[#efe3d6] pt-4 sm:flex-row sm:items-center sm:justify-between">

@@ -90,7 +90,7 @@ function ChatModerationRow({ participant }: { participant: AdminChatParticipant 
           <div className="mt-4 grid gap-3 sm:grid-cols-2">
             <div className="rounded-[18px] border border-[#e6d8c7] bg-white/80 px-3 py-3">
               <p className="text-[10px] uppercase tracking-[0.18em] text-[#927d65]">
-                Ultima actividad
+                Última actividad
               </p>
               <p className="mt-2 text-sm text-[#4f4337]">
                 {formatDateTime(participant.latestMessageAt)}
@@ -105,14 +105,14 @@ function ChatModerationRow({ participant }: { participant: AdminChatParticipant 
                 {participant.moderation.isBlocked
                   ? "Acceso cerrado"
                   : mutedActive
-                    ? "Lectura solo"
-                    : "Participacion libre"}
+                    ? "Solo lectura"
+                    : "Participación libre"}
               </p>
             </div>
           </div>
 
           <p className="mt-4 text-sm leading-6 text-[#625549]">
-            Ultima actividad: {formatDateTime(participant.latestMessageAt)}
+            Última actividad: {formatDateTime(participant.latestMessageAt)}
           </p>
         </div>
 
@@ -136,7 +136,7 @@ function ChatModerationRow({ participant }: { participant: AdminChatParticipant 
               className="w-full rounded-2xl border border-black/10 bg-[#F6F0E8] px-4 py-3 text-sm text-black outline-none focus:border-black/30"
             />
             <p className="text-xs leading-5 text-[#7b6a58]">
-              Si lo dejas vacio, el silencio queda activo hasta que lo retires manualmente.
+              Si lo dejas vacío, el silencio queda activo hasta que lo retires manualmente.
             </p>
           </label>
         </div>

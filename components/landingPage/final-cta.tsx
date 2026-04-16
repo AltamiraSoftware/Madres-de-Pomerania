@@ -39,7 +39,7 @@ export function FinalCTA() {
                   className="btn-luxury inline-block bg-foreground px-10 py-4 text-[10px] tracking-[0.22em] text-background uppercase"
                   onClick={openLogin}
             >
-              Unete Ahora
+              Únete ahora
             </button>
           </div>
         </div>

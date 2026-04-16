@@ -217,7 +217,7 @@ export async function getChatMessages(roomId: string): Promise<ChatMessage[]> {
     const isAdminAuthor = adminUserIds.has(message.user_id);
     const email = profile?.email ?? null;
     const fullName = profile?.full_name ?? null;
-    const displayName = isAdminAuthor ? "Mama de Boo" : fullName ?? email ?? "Miembro";
+    const displayName = isAdminAuthor ? "Mamá de Boo" : fullName ?? email ?? "Miembro";
 
     return {
       id: message.id,
@@ -227,7 +227,7 @@ export async function getChatMessages(roomId: string): Promise<ChatMessage[]> {
       createdAt: message.created_at,
       displayName,
       email,
-      fullName: isAdminAuthor ? "Mama de Boo" : fullName,
+      fullName: isAdminAuthor ? "Mamá de Boo" : fullName,
     };
   });
 }

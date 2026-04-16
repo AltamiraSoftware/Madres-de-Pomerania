@@ -100,7 +100,7 @@ export default function DossierEditor({ dossier }: { dossier: ContentItem }) {
         }
 
         if (file.size > MAX_UPLOAD_SIZE_BYTES) {
-          throw new Error("El PDF supera el limite de 100 MB.");
+          throw new Error("El PDF supera el límite de 100 MB.");
         }
 
         setUploadMessage("Preparando subida segura...");
@@ -170,7 +170,7 @@ export default function DossierEditor({ dossier }: { dossier: ContentItem }) {
 
       <label className="space-y-2">
         <span className="text-xs uppercase tracking-[0.18em] text-black/45">
-          Titulo
+          Título
         </span>
         <input
           type="text"
@@ -183,7 +183,7 @@ export default function DossierEditor({ dossier }: { dossier: ContentItem }) {
 
       <label className="space-y-2">
         <span className="text-xs uppercase tracking-[0.18em] text-black/45">
-          Descripcion
+          Descripción
         </span>
         <textarea
           name="description"
@@ -206,7 +206,7 @@ export default function DossierEditor({ dossier }: { dossier: ContentItem }) {
             className="block w-full rounded-2xl border border-black/10 bg-[#F6F0E8] px-4 py-3 text-sm text-black file:mr-3 file:rounded-full file:border-0 file:bg-black file:px-3 file:py-2 file:text-sm file:text-[#F6F0E8]"
           />
           <p className="text-xs text-black/45">
-            Subida directa a Storage con autorizacion segura. Limite recomendado: 100 MB.
+            Subida directa a Storage con autorización segura. Límite recomendado: 100 MB.
           </p>
         </label>
 
