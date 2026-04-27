@@ -2,7 +2,6 @@ import type { Metadata, Viewport } from "next";
 import { Inter, Playfair_Display } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
-
 import { AuthModalProvider } from "@/components/auth/AuthModalProvider";
 import { AuthModal } from "@/components/auth/AuthModal";
 
